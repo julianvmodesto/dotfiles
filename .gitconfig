@@ -1,0 +1,33 @@
+[alias]
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+[commit]
+	gpgsign = true
+[core]
+	editor = nvim
+
+	autocrlf = input
+[credential]
+	helper = osxkeychain
+[diff]
+    # Detect copies as well as renames
+	renames = copies
+[push]
+	default = simple
+[rebase]
+    # Sebase from a dirty worktree
+    # git rebase --autostash
+    autostash = true
+[stash]
+    # Use
+    # git stash show --patch
+    # instead of
+    # git stash show --stat
+    showPatch = true
+[submodule]
+    # Fetch submodules in n parallel threads
+    fetchJobs = 4
+[user]
+	name = Julian V. Modesto
+	email = julianvmodesto@gmail.com
+	signingkey = BB9AF852
+
