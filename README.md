@@ -31,6 +31,7 @@ brew install watch
 brew install jenv
 brew install shellcheck
 brew install yarn
+brew install httpie
 ```
 
 nvim
