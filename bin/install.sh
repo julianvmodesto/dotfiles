@@ -84,6 +84,8 @@ base() {
     whois \
     xclip \
     yarn
+
+  install_docker
 }
 
 base_macos() {
