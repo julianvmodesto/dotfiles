@@ -15,6 +15,8 @@
 [diff]
     # Detect copies as well as renames
 	renames = copies
+[hub]
+    host = git.liveramp.net
 [push]
 	default = simple
 [rebase]
@@ -32,7 +34,7 @@
     fetchJobs = 4
 [user]
 	name = Julian V. Modesto
-	email = julianvmodesto@gmail.com
+    email = julian.modesto@liveramp.com
 	signingkey = BB9AF852
 
 [filter "lfs"]
