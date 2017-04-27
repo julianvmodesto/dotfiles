@@ -44,6 +44,7 @@ base() {
 
   apt-get install -y \
     bash-completion \
+    coreutils \
     git \
     google-cloud-sdk \
     jq \
