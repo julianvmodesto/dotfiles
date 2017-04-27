@@ -5,13 +5,12 @@
 	staash = stash --include-untracked
 	staaash = stash --all
 [commit]
-	gpgsign = true
+	gpgsign = false
 [core]
 	editor = nvim
     excludesfile = ~/.gitignore
 	autocrlf = input
 [credential]
-	helper = osxkeychain
 [diff]
     # Detect copies as well as renames
 	renames = copies
@@ -35,7 +34,7 @@
 [user]
 	name = Julian V. Modesto
     email = julian.modesto@liveramp.com
-	signingkey = BB9AF852
+    signingkey = BB9AF852
 
 [filter "lfs"]
 	clean = git-lfs clean -- %f
