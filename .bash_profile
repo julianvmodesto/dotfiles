@@ -34,3 +34,11 @@ done
 	-W "$(grep "^Host" ~/.ssh/config | \
 	grep -v "[?*]" | cut -d " " -f2 | \
 	tr ' ' '\n')" scp sftp ssh
+
+#
+# Editors
+#
+
+export EDITOR='nvim'
+export VISUAL='nvim'
+export PAGER='less'
