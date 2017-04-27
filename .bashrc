@@ -51,7 +51,8 @@ if ! shopt -oq posix; then
 	elif [[ -f /etc/bash_completion ]]; then
 		# shellcheck source=/dev/null
 		. /etc/bash_completion
-	elif [[ -f $(brew --prefix)/etc/bash_completion  ]]; then
+	elif [[ -z "$(which brew)" ]] && [[ -f $(brew --prefix)/etc/bash_completion  ]]; then
+        # macOS
 		# shellcheck source=/dev/null
         . $(brew --prefix)/etc/bash_completion
     fi
@@ -62,6 +63,21 @@ if [[ -d /etc/bash_completion.d ]]; then
       source "$file"
   done
   unset file
+fi
+
+# Google Cloud SDK
+if [[ -z "$(which brew)" ]] && [[ -f $(brew --prefix)/Caskroom/google-cloud-sdk  ]]; then
+    # macOS
+    # shellcheck source=/dev/null
+    . $(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc
+    # shellcheck source=/dev/null
+    . $(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc
+fi
+
+# Kubernetes
+if command -v kubectl > /dev/null; then
+    # shellcheck source=/dev/null
+    source <(kubectl completion bash)
 fi
 
 #
