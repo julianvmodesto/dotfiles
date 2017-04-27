@@ -13,16 +13,6 @@ esac
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
-#
-# Less
-#
-
-# Set the default Less options.
-
-# Mouse-wheel scrolling has been disabled by -X (disable screen clearing).
-# Remove -X and -F (exit if the content fits on one screen) to enable it.
-# export LESS='-F -g -i -M -R -S -w -X -z-4'
-
 # https://www.topbug.net/blog/2016/09/27/make-gnu-less-more-powerful/
 export LESS='--quit-if-one-screen --ignore-case --status-column --LONG-PROMPT --RAW-CONTROL-CHARS --HILITE-UNREAD --tabs=4 --no-init --window=-4'
 # Set colors for less. Borrowed from https://wiki.archlinux.org/index.php/Color_output_in_console#less .
@@ -37,10 +27,6 @@ export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-#
-# Completion
-#
-
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
@@ -51,22 +37,20 @@ if ! shopt -oq posix; then
 	elif [[ -f /etc/bash_completion ]]; then
 		# shellcheck source=/dev/null
 		. /etc/bash_completion
-	elif [[ -z "$(which brew)" ]] && [[ -f $(brew --prefix)/etc/bash_completion  ]]; then
+	elif command -v brew > /dev/null && [[ -f $(brew --prefix)/etc/bash_completion  ]]; then
         # macOS
 		# shellcheck source=/dev/null
         . $(brew --prefix)/etc/bash_completion
     fi
 fi
-if [[ -d /etc/bash_completion.d ]]; then
-  for file in /etc/bash_completion.d/* ; do
-      # shellcheck source=/dev/null
-      source "$file"
-  done
-  unset file
+
+if [[ -f "${HOME}/.bash_profile" ]]; then
+	# shellcheck source=/dev/null
+	source "${HOME}/.bash_profile"
 fi
 
 # Google Cloud SDK
-if [[ -z "$(which brew)" ]] && [[ -f $(brew --prefix)/Caskroom/google-cloud-sdk  ]]; then
+if command -v brew > /dev/null && [[ -f $(brew --prefix)/Caskroom/google-cloud-sdk  ]]; then
     # macOS
     # shellcheck source=/dev/null
     . $(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc
@@ -80,13 +64,13 @@ if command -v kubectl > /dev/null; then
     source <(kubectl completion bash)
 fi
 
-#
-# Bash Profile
-#
-if [[ -f "${HOME}/.bash_profile" ]]; then
-	# shellcheck source=/dev/null
-	source "${HOME}/.bash_profile"
-fi
+# Node
+export NVM_DIR="$HOME/.nvm"
+[[ -s "$NVM_DIR/nvm.sh" ]] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[[ -s "$NVM_DIR/bash_completion" ]] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Go
+[[ -s "${HOME}/.gvm/scripts/gvm" ]] && source "${HOME}/.gvm/scripts/gvm"
 
 #
 # SSH Agent
@@ -96,4 +80,10 @@ SSHAGENTARGS="-s"
 if [ -z "$SSH_AUTH_SOCK" -a -x "$SSHAGENT"  ]; then
     eval `$SSHAGENT $SSHAGENTARGS`
     trap "kill $SSH_AGENT_PID" 0
+fi
+
+
+if [[ -r ".work" ]] && [[ -f ".work" ]]; then
+    # shellcheck source=/dev/null
+    source ".work"
 fi

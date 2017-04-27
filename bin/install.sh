@@ -19,9 +19,22 @@ setup_sources() {
 		dirmngr \
 		--no-install-recommends
 	cat <<-EOF > /etc/apt/sources.list
-	# neovim
-    deb http://ppa.launchpad.net/neovim-ppa/stable/ubuntu xenial main
-    deb-src http://ppa.launchpad.net/neovim-ppa/stable/ubuntu xenial main
+        deb http://archive.ubuntu.com/ubuntu xenial main universe
+        deb http://security.ubuntu.com/ubuntu/ xenial-security universe main
+        deb http://archive.ubuntu.com/ubuntu xenial-updates universe main
+
+        # Neovim
+        deb http://ppa.launchpad.net/neovim-ppa/stable/ubuntu xenial main
+        deb-src http://ppa.launchpad.net/neovim-ppa/stable/ubuntu xenial main
+
+        # Docker
+        deb https://apt.dockerproject.org/repo ubuntu-xenial main
+
+        # Git LFS
+        deb https://packagecloud.io/github/git-lfs/ubuntu/ xenial main
+
+        # Yarn
+        deb https://dl.yarnpkg.com/debian/ stable main
 	EOF
 
 	# Add the Cloud SDK distribution URI as a package source
@@ -33,6 +46,15 @@ setup_sources() {
 	# add the neovim ppa gpg key
 	apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 9DBB0BE9366964F134855E2255F96FCF8231B6DD
 
+    # Add Git LFS PGP key
+    wget -q -O- https://packagecloud.io/gpg.key | sudo apt-key add -
+
+    # Add Docker PGP key.
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+
+    # Add Yarn
+    wget -q -O- https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+
 	# turn off translations, speed up apt-get update
 	mkdir -p /etc/apt/apt.conf.d
 	echo 'Acquire::Languages "none";' > /etc/apt/apt.conf.d/99translations
@@ -43,12 +65,27 @@ base() {
   apt-get -y upgrade
 
   apt-get install -y \
+    apparmor \
+    apparmor-utils \
     bash-completion \
+    bison \
+    build-essential \
     coreutils \
+    docker-engine \
     git \
+    git-lfs \
     google-cloud-sdk \
+    htop \
     jq \
-    neovim
+    less \
+    moreutils \
+    neovim \
+    tmux \
+    whois \
+    xclip \
+    yarn
+
+  install_docker
 }
 
 base_macos() {
@@ -72,7 +109,7 @@ install_vim() {
 	cd "$HOME"
 
 	# install .vim files
-	git clone --recursive git@github.com:julianvmodesto/.vim.git "${HOME}/.vim"
+	git clone --recursive https://github.com/julianvmodesto/.vim.git "${HOME}/.vim"
 	ln -snf "${HOME}/.vim/vimrc" "${HOME}/.vimrc"
 
 	# alias vim dotfiles to neovim
@@ -103,6 +140,17 @@ install_vim() {
         sudo update-alternatives --config editor
     fi
 	)
+}
+
+install_docker() {
+	# create docker group
+	sudo groupadd docker
+    sudo usermod -aG docker "$(whoami)"
+
+	# update grub with docker configs and power-saving items
+	sudo sed -i.bak 's/GRUB_CMDLINE_LINUX=""/GRUB_CMDLINE_LINUX="cgroup_enable=memory swapaccount=1 pcie_aspm=force apparmor=1 security=apparmor"/g' /etc/default/grub
+	echo "Docker has been installed. If you want memory management & swap"
+	echo "run update-grub & reboot"
 }
 
 usage() {
