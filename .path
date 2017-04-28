@@ -7,3 +7,5 @@ export PATH="/usr/local/bin:${PATH}:${GOPATH}/bin:/sbin"
 # Rust
 export PATH="${PATH}:${HOME}/.cargo/bin"
 
+# Ruby
+export PATH="$PATH:$HOME/.rvm/bin"

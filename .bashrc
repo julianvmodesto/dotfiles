@@ -65,16 +65,16 @@ if command -v kubectl > /dev/null; then
 fi
 
 # Node
-export NVM_DIR="$HOME/.nvm"
-[[ -s "$NVM_DIR/nvm.sh" ]] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[[ -s "$NVM_DIR/bash_completion" ]] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+export NVM_DIR="${HOME}/.nvm"
+[[ -s "${NVM_DIR}/nvm.sh" ]] && \. "${NVM_DIR}/nvm.sh"  # This loads nvm
+[[ -s "${NVM_DIR}/bash_completion" ]] && \. "${NVM_DIR}/bash_completion"  # This loads nvm bash_completion
 
 # Go
 [[ -s "${HOME}/.gvm/scripts/gvm" ]] && source "${HOME}/.gvm/scripts/gvm"
 
-#
-# SSH Agent
-#
+# Ruby
+[[ -s "${HOME}/.rvm/scripts/rvm" ]] && source "${HOME}/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
 SSHAGENT=$(which ssh-agent)
 SSHAGENTARGS="-s"
 if [ -z "$SSH_AUTH_SOCK" -a -x "$SSHAGENT"  ]; then
@@ -82,8 +82,10 @@ if [ -z "$SSH_AUTH_SOCK" -a -x "$SSHAGENT"  ]; then
     trap "kill $SSH_AGENT_PID" 0
 fi
 
-
 if [[ -r ".work" ]] && [[ -f ".work" ]]; then
     # shellcheck source=/dev/null
     source ".work"
 fi
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
