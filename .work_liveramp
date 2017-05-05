@@ -1,6 +1,8 @@
 #!/bin/bash
 
 export WORKSPACE="${HOME}/workspace"
+export GOPATH="${WORKSPACE}"
+export PATH="${PATH}:/usr/local/go/bin:${GOPATH}/bin:${GOPATH}/wbin"
 
 # Flyway setup.
 export PATH=$PATH:$HOME/flyway
