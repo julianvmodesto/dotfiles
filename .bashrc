@@ -59,6 +59,9 @@ if command -v kubectl > /dev/null; then
     source <(kubectl completion bash)
 fi
 
+# fzf
+[[ -f ~/.fzf.bash ]] && source ~/.fzf.bash
+
 # Node
 export NVM_DIR="${HOME}/.nvm"
 [[ -s "${NVM_DIR}/nvm.sh" ]] && \. "${NVM_DIR}/nvm.sh"  # This loads nvm
