@@ -13,6 +13,10 @@ esac
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
+# bash vi editting
+# http://www.catonmat.net/blog/bash-vi-editing-mode-cheat-sheet/
+set -o vi
+
 # https://www.topbug.net/blog/2016/09/27/make-gnu-less-more-powerful/
 export LESS='--quit-if-one-screen --ignore-case --status-column --LONG-PROMPT --RAW-CONTROL-CHARS --HILITE-UNREAD --tabs=4 --no-init --window=-4'
 # Set colors for less. Borrowed from https://wiki.archlinux.org/index.php/Color_output_in_console#less .
@@ -87,3 +91,4 @@ fi
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
+
