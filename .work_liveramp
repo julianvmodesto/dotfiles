@@ -1,6 +1,8 @@
 #!/bin/bash
 
-source "${HOME}/.liveramp_profile"
+if [[ -f "${HOME}/.liveramp_profile" ]]; then
+  source "${HOME}/.liveramp_profile"
+fi
 
 export WORKSPACE="${HOME}/workspace"
 export GOPATH="${WORKSPACE}"
@@ -27,4 +29,7 @@ if [[ -f /usr/local/share/chtf/chtf.sh ]]; then
   source "/usr/local/share/chtf/chtf.sh"
   chtf 0.8.8
 fi
+
+git config --global user.email julian.modesto@liveramp.com
+git config --global hub.host git.liveramp.net
 
