@@ -80,6 +80,7 @@ base() {
     less \
     moreutils \
     neovim \
+    shellcheck \
     tmux \
     whois \
     xclip \
