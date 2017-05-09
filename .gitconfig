@@ -4,6 +4,7 @@
 	stsh = stash --keep-index
 	staash = stash --include-untracked
 	staaash = stash --all
+	pushf = push --force-with-lease
 [commit]
 	gpgsign = false
 [core]
@@ -15,7 +16,7 @@
     # Detect copies as well as renames
 	renames = copies
 [hub]
-    host = git.liveramp.net
+    host = github.com
 [push]
 	default = simple
 [rebase]
@@ -33,7 +34,7 @@
     fetchJobs = 4
 [user]
 	name = Julian V. Modesto
-    email = julian.modesto@liveramp.com
+    email = julianvmodesto@gmail.com
     signingkey = BB9AF852
 
 [filter "lfs"]
