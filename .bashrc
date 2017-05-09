@@ -48,6 +48,11 @@ if ! shopt -oq posix; then
     fi
 fi
 
+if [[ -r "${HOME}/.bash_profile" ]] && [[ -f "${HOME}/.bash_profile" ]]; then
+    # shellcheck source=/dev/null
+    source "${HOME}/.bash_profile"
+fi
+
 # Google Cloud SDK
 if command -v brew > /dev/null && [[ -f $(brew --prefix)/Caskroom/google-cloud-sdk  ]]; then
     # macOS
