@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source "${HOME}/.liveramp_profile"
+
 export WORKSPACE="${HOME}/workspace"
 export GOPATH="${WORKSPACE}"
 export PATH="${PATH}:/usr/local/go/bin:${GOPATH}/bin:${GOPATH}/wbin"
@@ -15,8 +17,14 @@ export PGDATABASE="postgres"
 export PGPASSWORD="password"
 export PGSSLMODE="disable"
 
-if [ ! -d "$HOME/.kube" ]; then
+if [ ! -d "${HOME}/.kube" ]; then
   echo -e "Kube config not found. Running setup-gcloud.sh"
-  "$WORKSPACE/scripts/setup-gcloud.sh"
+  "${WORKSPACE}/scripts/setup-gcloud.sh"
+fi
+
+# Terraform
+if [[ -f /usr/local/share/chtf/chtf.sh ]]; then
+  source "/usr/local/share/chtf/chtf.sh"
+  chtf 0.8.8
 fi
 
