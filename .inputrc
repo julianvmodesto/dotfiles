@@ -1,0 +1,14 @@
+set editing-mode vi
+set completion-ignore-case On
+set bell-style none
+
+# vi settings
+# https://blog.bugsnag.com/tmux-and-vim/
+$if mode=vi
+  set keymap vi-command
+  "gg": beginning-of-history
+  "G": end-of-history
+  set keymap vi-insert
+  "jk": vi-movement-mode # remap escape
+$endif
+
