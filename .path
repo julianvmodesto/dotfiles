@@ -9,3 +9,6 @@ export PATH="${PATH}:${HOME}/.cargo/bin"
 
 # Ruby
 export PATH="$PATH:$HOME/.rvm/bin"
+
+# Python
+export PATH="${HOME}/anaconda/bin:$PATH"
