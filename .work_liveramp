@@ -11,14 +11,6 @@ export PATH="${PATH}:/usr/local/go/bin:${GOPATH}/bin:${GOPATH}/wbin"
 # Flyway setup.
 export PATH=$PATH:$HOME/flyway
 
-# Setup POSTGRES interaction
-export PGHOST=$(kubectl get svc postgresql -o 'jsonpath={.spec.clusterIP}')
-export PGPORT=$(kubectl get svc postgresql -o 'jsonpath={.spec.ports[0].port}')
-export PGUSER="postgres"
-export PGDATABASE="postgres"
-export PGPASSWORD="password"
-export PGSSLMODE="disable"
-
 if [ ! -d "${HOME}/.kube" ]; then
   echo -e "Kube config not found. Running setup-gcloud.sh"
   "${WORKSPACE}/scripts/setup-gcloud.sh"
@@ -32,4 +24,9 @@ fi
 
 git config --global user.email julian.modesto@liveramp.com
 git config --global hub.host git.liveramp.net
+
+complete -F _make wmake
+if command -v _completion_loader > /dev/null; then
+  _completion_loader make
+fi
 
