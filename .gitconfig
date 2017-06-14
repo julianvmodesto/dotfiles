@@ -5,6 +5,7 @@
 	staash = stash --include-untracked
 	staaash = stash --all
 	pushf = push --force-with-lease
+    recent = for-each-ref --count=10 --sort=-committerdate refs/heads/ --format="%(refname:short)"
 [commit]
 	gpgsign = false
 [core]
