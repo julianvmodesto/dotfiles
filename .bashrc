@@ -5,8 +5,8 @@
 
 # If not running interactively, don't do anything
 case $- in
-	*i*) ;;
-	*) return;;
+  *i*) ;;
+  *) return;;
 esac
 
 # check the window size after each command and, if necessary,
@@ -35,32 +35,32 @@ export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
 if ! shopt -oq posix; then
-	if [[ -f /usr/share/bash-completion/bash_completion ]]; then
-		# shellcheck source=/dev/null
-		. /usr/share/bash-completion/bash_completion
-	elif [[ -f /etc/bash_completion ]]; then
-		# shellcheck source=/dev/null
-		. /etc/bash_completion
-	elif command -v brew > /dev/null && [[ -f $(brew --prefix)/etc/bash_completion  ]]; then
-        # macOS
-		# shellcheck source=/dev/null
-        . $(brew --prefix)/etc/bash_completion
-    fi
+  if [[ -f /usr/share/bash-completion/bash_completion ]]; then
+    # shellcheck source=/dev/null
+    . /usr/share/bash-completion/bash_completion
+  elif [[ -f /etc/bash_completion ]]; then
+    # shellcheck source=/dev/null
+    . /etc/bash_completion
+  elif command -v brew > /dev/null && [[ -f $(brew --prefix)/etc/bash_completion  ]]; then
+    # macOS
+    # shellcheck source=/dev/null
+    . $(brew --prefix)/etc/bash_completion
+  fi
 fi
 
 # Google Cloud SDK
 if command -v brew > /dev/null && [[ -f $(brew --prefix)/Caskroom/google-cloud-sdk  ]]; then
-    # macOS
-    # shellcheck source=/dev/null
-    . $(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc
-    # shellcheck source=/dev/null
-    . $(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc
+  # macOS
+  # shellcheck source=/dev/null
+  . $(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc
+  # shellcheck source=/dev/null
+  . $(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc
 fi
 
 # Kubernetes
 if command -v kubectl > /dev/null; then
-    # shellcheck source=/dev/null
-    source <(kubectl completion bash)
+  # shellcheck source=/dev/null
+  source <(kubectl completion bash)
 fi
 
 # fzf
@@ -87,7 +87,7 @@ if [ -z "$SSH_AUTH_SOCK" -a -x "$SSHAGENT"  ]; then
 fi
 
 if [[ -e ~/.work ]] && [[ -f ~/.work ]] && [[ -r ~/.work ]]; then
-    # shellcheck source=/dev/null
-    source ~/.work
+  # shellcheck source=/dev/null
+  source ~/.work
 fi
 
