@@ -4,6 +4,8 @@
 command -v pbcopy > /dev/null || alias pbcopy='xclip -selection clipboard'
 command -v pbpaste > /dev/null || alias pbpaste='xclip -selection clipboard -o'
 
+alias shrug="echo '¯\_(ツ)_/¯' | pbcopy"
+
 command -v update-alternatives > /dev/null || alias vim='NVIM_TUI_ENABLE_TRUE_COLOR=1 nvim'
 
 # OS X has no `md5sum`, so use `md5` as a fallback
