@@ -51,3 +51,9 @@ case "$(uname)" in
   ;;
 esac
 
+jump_to() {
+  r=$1; shift
+  e=$1; shift
+  ssh -At $(curl -s http://consul-server01.liveramp.net:8500/v1/kv/aws/$r/$e/bastion?raw) $*
+}
+
