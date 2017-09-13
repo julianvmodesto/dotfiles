@@ -82,8 +82,16 @@ fi
 SSHAGENT=$(which ssh-agent)
 SSHAGENTARGS="-s"
 if [ -z "$SSH_AUTH_SOCK" -a -x "$SSHAGENT"  ]; then
-    eval `$SSHAGENT $SSHAGENTARGS`
-    trap "kill $SSH_AGENT_PID" 0
+  eval `$SSHAGENT $SSHAGENTARGS`
+  trap "kill $SSH_AGENT_PID" 0
+  case "$(uname)" in
+    Darwin)
+      ssh-add -K ~/.ssh/
+    ;;
+    Linux)
+      ssh-add -L ~/.ssh/
+    ;;
+  esac
 fi
 
 if [[ -e ~/.work ]] && [[ -f ~/.work ]] && [[ -r ~/.work ]]; then
