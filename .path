@@ -8,7 +8,9 @@ export PATH="/usr/local/bin:${PATH}:${GOPATH}/bin:/sbin"
 export PATH="${PATH}:${HOME}/.cargo/bin"
 
 # Ruby
-export PATH="$PATH:$HOME/.rvm/bin"
+if ! ([[ -e ~/.liveramp_profile ]] && [[ -f ~/.liveramp_profile ]] && [[ -r ~/.liveramp_profile ]]); then
+  export PATH="$PATH:$HOME/.rvm/bin"
+fi
 
 # Python
 export PATH="${HOME}/anaconda/bin:$PATH"

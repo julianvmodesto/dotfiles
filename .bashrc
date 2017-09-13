@@ -75,7 +75,9 @@ export NVM_DIR="${HOME}/.nvm"
 [[ -s "${HOME}/.gvm/scripts/gvm" ]] && source "${HOME}/.gvm/scripts/gvm"
 
 # Ruby
-[[ -s "${HOME}/.rvm/scripts/rvm" ]] && source "${HOME}/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+if ! ([[ -e ~/.liveramp_profile ]] && [[ -f ~/.liveramp_profile ]] && [[ -r ~/.liveramp_profile ]]); then
+  [[ -s "${HOME}/.rvm/scripts/rvm" ]] && source "${HOME}/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+fi
 
 SSHAGENT=$(which ssh-agent)
 SSHAGENTARGS="-s"
@@ -84,11 +86,8 @@ if [ -z "$SSH_AUTH_SOCK" -a -x "$SSHAGENT"  ]; then
     trap "kill $SSH_AGENT_PID" 0
 fi
 
-if [[ -r ".work" ]] && [[ -f ".work" ]]; then
+if [[ -e ~/.work ]] && [[ -f ~/.work ]] && [[ -r ~/.work ]]; then
     # shellcheck source=/dev/null
-    source ".work"
+    source ~/.work
 fi
-
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
 
