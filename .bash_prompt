@@ -71,7 +71,26 @@ prompt_kube() {
   local kube_context='';
   if [ -e "$HOME/.kube/config" ]; then
     kube_context=$(grep '^current-context: ' $HOME/.kube/config | cut -d' ' -f2-)
-    echo -e "${1}kube(${kube_context})";
+
+    local num_colors="4"
+    local random_color_number=$(echo ${kube_context} | md5sum | cut -f1 -d" " | awk '{print toupper($0)}' | xargs -I{} echo "ibase=16; obase=10; scale=0; {} % ${num_colors}" | bc)
+
+    case ${random_color_number} in
+    0)
+      random_color=${orange}
+      ;;
+    1)
+      random_color=${yellow}
+      ;;
+    2)
+      random_color=${red}
+      ;;
+    *)
+      random_color=${purple}
+      ;;
+    esac
+
+    echo -e "${1}${random_color}kube(${kube_context})";
   else
     return;
   fi;
@@ -138,7 +157,7 @@ PS1+="\[${hostStyle}\]${cloud}\h"; # host
 PS1+="\[${white}\] in ";
 PS1+="\[${green}\]\w"; # working directory
 PS1+="\$(prompt_git \"${white} on ${violet}\")"; # Git repository details
-PS1+="\$(prompt_kube \"${white} with ${orange}\")"; # Kuberenetes context details
+PS1+="\$(prompt_kube \"${white} with \")"; # Kuberenetes context details
 PS1+="\n";
 PS1+="\[${white}\]\$ \[${reset}\]"; # `$` (and reset color)
 export PS1;
