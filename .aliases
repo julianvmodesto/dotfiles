@@ -1,5 +1,8 @@
 #!/bin/bash
 
+alias k="kubectl"
+alias g="git"
+
 # want pb
 command -v pbcopy > /dev/null || alias pbcopy='xclip -selection clipboard'
 command -v pbpaste > /dev/null || alias pbpaste='xclip -selection clipboard -o'
