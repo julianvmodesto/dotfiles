@@ -75,9 +75,7 @@ export NVM_DIR="${HOME}/.nvm"
 [[ -s "${HOME}/.gvm/scripts/gvm" ]] && source "${HOME}/.gvm/scripts/gvm"
 
 # Ruby
-if ! ([[ -e ~/.liveramp_profile ]] && [[ -f ~/.liveramp_profile ]] && [[ -r ~/.liveramp_profile ]]); then
-  [[ -s "${HOME}/.rvm/scripts/rvm" ]] && source "${HOME}/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-fi
+command -v rbenv > /dev/null && eval "$(rbenv init -)"
 
 SSHAGENT=$(which ssh-agent)
 SSHAGENTARGS="-s"

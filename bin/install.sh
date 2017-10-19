@@ -80,6 +80,8 @@ base() {
     less \
     moreutils \
     neovim \
+    rbenv \
+    ruby-build \
     shellcheck \
     tmux \
     whois \
