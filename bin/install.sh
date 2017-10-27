@@ -103,7 +103,9 @@ base_macos() {
     brew install \
       bash-completion \
       kubectl \
-      neovim/neovim/neovim
+      neovim/neovim/neovim \
+      rbenv \
+      ruby-build
 
     brew cask install google-cloud-sdk
     # brew cask install dnscrypt
