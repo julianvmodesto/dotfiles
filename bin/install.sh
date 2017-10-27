@@ -74,6 +74,9 @@ base() {
     docker-engine \
     git \
     git-lfs \
+    gnupg \
+    gnupg2 \
+    gnupg-agent \
     google-cloud-sdk \
     htop \
     jq \

@@ -77,20 +77,22 @@ export NVM_DIR="${HOME}/.nvm"
 # Ruby
 command -v rbenv > /dev/null && eval "$(rbenv init -)"
 
-SSHAGENT=$(which ssh-agent)
-SSHAGENTARGS="-s"
-if [ -z "$SSH_AUTH_SOCK" -a -x "$SSHAGENT"  ]; then
-  eval `$SSHAGENT $SSHAGENTARGS`
-  trap "kill $SSH_AGENT_PID" 0
-  case "$(uname)" in
-    Darwin)
-      ssh-add -K ~/.ssh/
-    ;;
-    Linux)
-      ssh-add -L ~/.ssh/
-    ;;
-  esac
+# use a tty for gpg
+# solves error: "gpg: signing failed: Inappropriate ioctl for device"
+GPG_TTY=$(tty)
+export GPG_TTY
+# Start the gpg-agent if not already running
+if ! pgrep -x -u "${USER}" gpg-agent >/dev/null 2>&1; then
+  launchctlgpg-connect-agent /bye >/dev/null 2>&1
+  gpg-connect-agent updatestartuptty /bye >/dev/null
 fi
+# Set SSH to use gpg-agent
+unset SSH_AGENT_PID
+if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+  export SSH_AUTH_SOCK="${HOME}/.gnupg/S.gpg-agent.ssh"
+fi
+# add alias for ssh to update the tty
+alias ssh="gpg-connect-agent updatestartuptty /bye >/dev/null; ssh"
 
 if [[ -e ~/.work ]] && [[ -f ~/.work ]] && [[ -r ~/.work ]]; then
   # shellcheck source=/dev/null
