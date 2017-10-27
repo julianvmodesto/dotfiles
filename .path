@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# Go
-export GOPATH="${HOME}/go"
-export PATH="/usr/local/bin:${PATH}:${GOPATH}/bin:/sbin"
-
 # Rust
 export PATH="${PATH}:${HOME}/.cargo/bin"
 
