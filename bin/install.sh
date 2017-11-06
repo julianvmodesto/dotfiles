@@ -18,24 +18,7 @@ setup_sources() {
 		curl \
 		dirmngr \
 		--no-install-recommends
-	cat <<-EOF > /etc/apt/sources.list
-        deb http://archive.ubuntu.com/ubuntu xenial main universe
-        deb http://security.ubuntu.com/ubuntu/ xenial-security universe main
-        deb http://archive.ubuntu.com/ubuntu xenial-updates universe main
 
-        # Neovim
-        deb http://ppa.launchpad.net/neovim-ppa/stable/ubuntu xenial main
-        deb-src http://ppa.launchpad.net/neovim-ppa/stable/ubuntu xenial main
-
-        # Docker
-        deb https://apt.dockerproject.org/repo ubuntu-xenial main
-
-        # Git LFS
-        deb https://packagecloud.io/github/git-lfs/ubuntu/ xenial main
-
-        # Yarn
-        deb https://dl.yarnpkg.com/debian/ stable main
-	EOF
 
 	# Add the Cloud SDK distribution URI as a package source
 	echo "deb https://packages.cloud.google.com/apt cloud-sdk-sid main" > /etc/apt/sources.list.d/google-cloud-sdk.list
@@ -43,17 +26,24 @@ setup_sources() {
 	# Import the Google Cloud Platform public key
 	curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 
-	# add the neovim ppa gpg key
+	# Add Neovim PPA GPG key
 	apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 9DBB0BE9366964F134855E2255F96FCF8231B6DD
+	cat <<-EOF | sudo tee /etc/apt/sources.list.d/neovim.list
+        deb http://ppa.launchpad.net/neovim-ppa/stable/ubuntu xenial main
+        deb-src http://ppa.launchpad.net/neovim-ppa/stable/ubuntu xenial main
+	EOF
 
     # Add Git LFS PGP key
     wget -q -O- https://packagecloud.io/gpg.key | sudo apt-key add -
+    echo 'deb https://packagecloud.io/github/git-lfs/ubuntu/ xenial main' | sudo tee /etc/apt/sources.list.d/git-lfs.list
 
-    # Add Docker PGP key.
+    # Add Docker PGP key
     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+    echo 'deb https://apt.dockerproject.org/repo ubuntu-xenial main' | sudo tee /etc/apt/sources.list.d/docker.list
 
     # Add Yarn
     wget -q -O- https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 
 	# turn off translations, speed up apt-get update
 	mkdir -p /etc/apt/apt.conf.d
