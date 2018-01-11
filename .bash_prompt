@@ -67,10 +67,16 @@ prompt_git() {
 	fi;
 }
 
+KUBECONFIG="${HOME}/.kube/config"
 prompt_kube() {
   local kube_context='';
-  if [ -e "$HOME/.kube/config" ]; then
-    kube_context=$(grep '^current-context: ' $HOME/.kube/config | cut -d' ' -f2-)
+  local kube_context_namespace='';
+  if [[ -e "${KUBECONFIG}" ]]; then
+    kube_context=$(grep '^current-context: ' "${KUBECONFIG}" | cut -d' ' -f2-)
+
+    kube_context_namespace="$(kubectl config view --minify --output 'jsonpath={..namespace}')"
+    # Set namespace to default if it is not defined
+    kube_context_namespace="${kube_context_namespace:-default}"
 
     local num_colors="4"
     local random_color_number=$(echo ${kube_context} | md5sum | cut -f1 -d" " | awk '{print toupper($0)}' | xargs -I{} echo "ibase=16; obase=10; scale=0; {} % ${num_colors}" | bc)
@@ -90,7 +96,7 @@ prompt_kube() {
       ;;
     esac
 
-    echo -e "${1}${random_color}kube(${kube_context})";
+    echo -e "${1}${random_color}kube(${kube_context}:${kube_context_namespace})";
   else
     return;
   fi;
