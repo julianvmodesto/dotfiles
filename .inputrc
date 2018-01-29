@@ -10,8 +10,10 @@ set mark-symlinked-directories on
 
 # Use the text that has already been typed as the prefix for searching through
 # commands (i.e. more intelligent Up/Down behavior)
-"\e[B": history-search-forward
+"\eOA": history-search-backward
 "\e[A": history-search-backward
+"\eOB": history-search-forward
+"\e[B": history-search-forward
 
 # Do not autocomplete hidden files unless the pattern explicitly begins with a dot
 set match-hidden-files off
@@ -42,6 +44,9 @@ set bell-style none
 # vi settings
 # https://blog.bugsnag.com/tmux-and-vim/
 set editing-mode vi
+set show-mode-in-prompt on
+set vi-ins-mode-string \1\e[6 q\2
+set vi-cmd-mode-string \1\e[2 q\2
 $if mode=vi
   set keymap vi-command
   "gg": beginning-of-history
@@ -50,3 +55,8 @@ $if mode=vi
   "jk": vi-movement-mode # remap escape
 $endif
 
+## enable Alt-arrows
+"\e[1;5D": backward-word
+"\e[1;5C": forward-word
+"\eO1;5D": backward-word
+"\eO1;5C": forward-word
