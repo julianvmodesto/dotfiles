@@ -13,23 +13,50 @@ esac
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
-# bash vi editting
-# http://www.catonmat.net/blog/bash-vi-editing-mode-cheat-sheet/
-set -o vi
-
-# https://www.topbug.net/blog/2016/09/27/make-gnu-less-more-powerful/
-export LESS='--quit-if-one-screen --ignore-case --status-column --LONG-PROMPT --RAW-CONTROL-CHARS --HILITE-UNREAD --tabs=4 --no-init --window=-4'
-# Set colors for less. Borrowed from https://wiki.archlinux.org/index.php/Color_output_in_console#less .
-export LESS_TERMCAP_mb=$'\E[1;31m'     # begin bold
-export LESS_TERMCAP_md=$'\E[1;36m'     # begin blink
-export LESS_TERMCAP_me=$'\E[0m'        # reset bold/blink
-export LESS_TERMCAP_so=$'\E[01;44;33m' # begin reverse video
-export LESS_TERMCAP_se=$'\E[0m'        # reset reverse video
-export LESS_TERMCAP_us=$'\E[1;32m'     # begin underline
-export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
-
 # make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+[[ -x /usr/bin/lesspipe ]] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+  debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+  xterm-color) color_prompt=yes;;
+esac
+
+# uncomment for a colored prompt, if the terminal has the capability; turned
+# off by default to not distract the user: the focus in a terminal window
+# should be on the output of commands, not on the prompt
+force_color_prompt=yes
+
+if [ -n "$force_color_prompt" ]; then
+  if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+    # We have color support; assume it's compliant with Ecma-48
+    # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+    # a case would tend to support setf rather than setaf.)
+    color_prompt=yes
+  else
+    color_prompt=
+  fi
+fi
+
+if [ "$color_prompt" = yes ]; then
+  PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+else
+  PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+fi
+unset color_prompt force_color_prompt
+
+# If this is an xterm set the title to user@host:dir
+case "$TERM" in
+  xterm*|rxvt*)
+    PS1="\\[\\e]0;${debian_chroot:+($debian_chroot)}\\u@\\h: \\w\\a\\]$PS1"
+    ;;
+  *)
+    ;;
+esac
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -41,46 +68,23 @@ if ! shopt -oq posix; then
   elif [[ -f /etc/bash_completion ]]; then
     # shellcheck source=/dev/null
     . /etc/bash_completion
-  elif command -v brew > /dev/null && [[ -f $(brew --prefix)/etc/bash_completion  ]]; then
-    # macOS
-    # shellcheck source=/dev/null
-    . $(brew --prefix)/etc/bash_completion
   fi
 fi
-
-# Google Cloud SDK
-if command -v brew > /dev/null && [[ -f $(brew --prefix)/Caskroom/google-cloud-sdk  ]]; then
-  # macOS
-  # shellcheck source=/dev/null
-  . $(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc
-  # shellcheck source=/dev/null
-  . $(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc
+if [[ -d /etc/bash_completion.d ]]; then
+  for file in /etc/bash_completion.d/* ; do
+    # shellcheck source=/dev/null
+    source "$file"
+  done
 fi
 
-# Kubernetes
-if command -v kubectl > /dev/null; then
+if [[ -f "${HOME}/.bash_profile" ]]; then
   # shellcheck source=/dev/null
-  source <(kubectl completion bash)
+  source "${HOME}/.bash_profile"
 fi
 
-if command -v kops > /dev/null; then
-  # shellcheck source=/dev/null
-  source <(kops completion bash)
-fi
-
-# fzf
-[[ -f ~/.fzf.bash ]] && source ~/.fzf.bash
-
-# Node
-export NVM_DIR="${HOME}/.nvm"
-[[ -s "${NVM_DIR}/nvm.sh" ]] && \. "${NVM_DIR}/nvm.sh"  # This loads nvm
-[[ -s "${NVM_DIR}/bash_completion" ]] && \. "${NVM_DIR}/bash_completion"  # This loads nvm bash_completion
-
-# Go
-[[ -s "${HOME}/.gvm/scripts/gvm" ]] && source "${HOME}/.gvm/scripts/gvm"
-
-# Ruby
-command -v rbenv > /dev/null && eval "$(rbenv init -)"
+# bash vi editting
+# http://www.catonmat.net/blog/bash-vi-editing-mode-cheat-sheet/
+set -o vi
 
 # use a tty for gpg
 # solves error: "gpg: signing failed: Inappropriate ioctl for device"
@@ -88,7 +92,7 @@ GPG_TTY=$(tty)
 export GPG_TTY
 # Start the gpg-agent if not already running
 if ! pgrep -x -u "${USER}" gpg-agent >/dev/null 2>&1; then
-  launchctlgpg-connect-agent /bye >/dev/null 2>&1
+  gpg-connect-agent /bye >/dev/null 2>&1
   gpg-connect-agent updatestartuptty /bye >/dev/null
 fi
 # Set SSH to use gpg-agent
@@ -98,9 +102,3 @@ if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
 fi
 # add alias for ssh to update the tty
 alias ssh="gpg-connect-agent updatestartuptty /bye >/dev/null; ssh"
-
-if [[ -e ~/.work ]] && [[ -f ~/.work ]] && [[ -r ~/.work ]]; then
-  # shellcheck source=/dev/null
-  source ~/.work
-fi
-

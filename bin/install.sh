@@ -92,9 +92,11 @@ base_macos() {
 
     brew install \
       bash-completion \
+      icdiff \
       kubectl \
       neovim/neovim/neovim \
       rbenv \
+      reattach-to-user-namespace \
       ruby-build
 
     brew cask install google-cloud-sdk
