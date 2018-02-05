@@ -12,14 +12,11 @@ export PATH="${PATH}:${HOME}/.rbenv/bin"
 # Python
 export PATH="${HOME}/anaconda/bin:$PATH"
 
-# # Google Cloud SDK
-# if command -v brew > /dev/null && [[ -f $(brew --prefix)/Caskroom/google-cloud-sdk  ]]; then
-#   # macOS
-#   # shellcheck source=/dev/null
-#   . $(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc
-#   # shellcheck source=/dev/null
-#   . $(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc
-# fi
+# macOS Homebrew bash completion
+if [[ -f /usr/local/etc/bash_completion ]]; then
+  # shellcheck source=/dev/null
+  . /usr/local/etc/bash_completion
+fi
 
 # The next line updates PATH for the Google Cloud SDK.
 # shellcheck source=/dev/null
@@ -35,6 +32,7 @@ if command -v kubectl > /dev/null; then
   source <(kubectl completion bash)
 fi
 
+# Kops
 if command -v kops > /dev/null; then
   # shellcheck source=/dev/null
   source <(kops completion bash)
@@ -48,8 +46,9 @@ export NVM_DIR="${HOME}/.nvm"
 [[ -s "${NVM_DIR}/nvm.sh" ]] && \. "${NVM_DIR}/nvm.sh"  # This loads nvm
 [[ -s "${NVM_DIR}/bash_completion" ]] && \. "${NVM_DIR}/bash_completion"  # This loads nvm bash_completion
 
-# Go
+# Golang
 [[ -s "${HOME}/.gvm/scripts/gvm" ]] && source "${HOME}/.gvm/scripts/gvm"
+command -v gocomplete > /dev/null && complete -C gocomplete go
 
 # Ruby
 command -v rbenv > /dev/null && eval "$(rbenv init -)"

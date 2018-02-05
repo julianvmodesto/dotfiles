@@ -24,12 +24,6 @@ if [ ! -d "${HOME}/.kube" ]; then
   "${WORKSPACE}/scripts/setup-gcloud.sh"
 fi
 
-# Terraform
-if [[ -f /usr/local/share/chtf/chtf.sh ]]; then
-  source "/usr/local/share/chtf/chtf.sh"
-  chtf 0.8.8
-fi
-
 git config --global user.email julian.modesto@liveramp.com
 git config --global hub.host git.liveramp.net
 
@@ -41,8 +35,8 @@ fi
 
 mac_docker() {
   # Insert Docker into your shell using minikube.
-  status=$(minikube status --format={{.LocalkubeStatus}})
-  if [ "$status" == Running ]; then
+  status=$(minikube status --format={{.ClusterStatus}} 2>/dev/null)
+  if [ "$status" == "Running" ]; then
     eval $(minikube docker-env)
   fi
 }
