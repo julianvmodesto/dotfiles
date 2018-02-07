@@ -14,27 +14,27 @@ export PATH="${HOME}/anaconda/bin:$PATH"
 
 # macOS Homebrew bash completion
 if [[ -f /usr/local/etc/bash_completion ]]; then
-  # shellcheck source=/dev/null
+  # shellcheck disable=
   . /usr/local/etc/bash_completion
 fi
 
 # The next line updates PATH for the Google Cloud SDK.
-# shellcheck source=/dev/null
+# shellcheck disable=
 if [ -f "${HOME}/google-cloud-sdk/path.bash.inc" ]; then source "${HOME}/google-cloud-sdk/path.bash.inc"; fi
 
 # The next line enables shell command completion for gcloud.
-# shellcheck source=/dev/null
+# shellcheck disable=
 if [ -f "${HOME}/google-cloud-sdk/completion.bash.inc" ]; then source "${HOME}/google-cloud-sdk/completion.bash.inc"; fi
 
 # Kubernetes
 if command -v kubectl > /dev/null; then
-  # shellcheck source=/dev/null
+  # shellcheck disable=
   source <(kubectl completion bash)
 fi
 
 # Kops
 if command -v kops > /dev/null; then
-  # shellcheck source=/dev/null
+  # shellcheck disable=
   source <(kops completion bash)
 fi
 

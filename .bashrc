@@ -63,22 +63,22 @@ esac
 # sources /etc/bash.bashrc).
 if ! shopt -oq posix; then
   if [[ -f /usr/share/bash-completion/bash_completion ]]; then
-    # shellcheck source=/dev/null
+    # shellcheck disable=
     . /usr/share/bash-completion/bash_completion
   elif [[ -f /etc/bash_completion ]]; then
-    # shellcheck source=/dev/null
+    # shellcheck disable=
     . /etc/bash_completion
   fi
 fi
 if [[ -d /etc/bash_completion.d ]]; then
   for file in /etc/bash_completion.d/* ; do
-    # shellcheck source=/dev/null
+    # shellcheck disable=
     source "$file"
   done
 fi
 
 if [[ -f "${HOME}/.bash_profile" ]]; then
-  # shellcheck source=/dev/null
+  # shellcheck disable=
   source "${HOME}/.bash_profile"
 fi
 

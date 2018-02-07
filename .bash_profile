@@ -5,7 +5,7 @@
 # * ~/.extra can be used for other settings you don’t want to commit.
 for file in ~/.{bash_prompt,aliases,functions,path,dockerfunc,extra,exports,work}; do
   if [[ -r "$file" ]] && [[ -f "$file" ]]; then
-    # shellcheck source=/dev/null
+    # shellcheck disable=
     source "$file"
   fi
 done
