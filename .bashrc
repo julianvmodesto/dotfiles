@@ -86,6 +86,9 @@ fi
 # http://www.catonmat.net/blog/bash-vi-editing-mode-cheat-sheet/
 set -o vi
 
+# Java
+export JAVA_HOME=${JAVA_HOME:=/usr/lib/jvm/java-8-oracle}
+
 # use a tty for gpg
 # solves error: "gpg: signing failed: Inappropriate ioctl for device"
 GPG_TTY=$(tty)
