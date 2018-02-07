@@ -19,6 +19,7 @@ dotfiles:
 	ln -sfn $(CURDIR)/.gnupg/gpg.conf $(HOME)/.gnupg/gpg.conf;
 	ln -sfn $(CURDIR)/.gnupg/gpg-agent.conf $(HOME)/.gnupg/gpg-agent.conf;
 	ln -sfn $(CURDIR)/$(ALACRITTY) $(HOME)/.alacritty.yml
+	ln -sfn $(CURDIR)/$(ALACRITTY) $(HOME)/.config/alacritty/alacritty.yml
 
 work:
 	ln -sfn $(CURDIR)/.work_liveramp $(HOME)/.work
