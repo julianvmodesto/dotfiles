@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # update path
-export PATH=/usr/local/bin:/usr/local/go/bin:${PATH}:${GOPATH}/bin:/usr/share/bcc/tools:/sbin
+export PATH="/usr/local/bin:/usr/local/go/bin:${PATH}:${GOPATH}/bin:/usr/share/bcc/tools:/sbin"
 
 # Rust
 export PATH="${PATH}:${HOME}/.cargo/bin"
@@ -10,7 +10,13 @@ export PATH="${PATH}:${HOME}/.cargo/bin"
 export PATH="${PATH}:${HOME}/.rbenv/bin"
 
 # Python
-export PATH="${HOME}/anaconda/bin:$PATH"
+command -v pyenv > /dev/null && eval "$(pyenv init -)"
+command -v pyenv-virtualenv > /dev/null && eval "$(pyenv virtualenv-init -)"
+
+# macOS GNU utils
+if [[ -d "/usr/local/opt/coreutils/libexec/gnubin" ]]; then
+  export PATH="/usr/local/opt/coreutils/libexec/gnubin:${PATH}"
+fi
 
 # macOS Homebrew bash completion
 if [[ -f /usr/local/etc/bash_completion ]]; then
@@ -18,13 +24,9 @@ if [[ -f /usr/local/etc/bash_completion ]]; then
   . /usr/local/etc/bash_completion
 fi
 
-# The next line updates PATH for the Google Cloud SDK.
-# shellcheck disable=
-if [ -f "${HOME}/google-cloud-sdk/path.bash.inc" ]; then source "${HOME}/google-cloud-sdk/path.bash.inc"; fi
-
-# The next line enables shell command completion for gcloud.
-# shellcheck disable=
-if [ -f "${HOME}/google-cloud-sdk/completion.bash.inc" ]; then source "${HOME}/google-cloud-sdk/completion.bash.inc"; fi
+# Google Cloud SDK
+[[ -f "${HOME}/google-cloud-sdk/path.bash.inc" ]] && source "${HOME}/google-cloud-sdk/path.bash.inc"
+[[ -f "${HOME}/google-cloud-sdk/completion.bash.inc" ]] && source "${HOME}/google-cloud-sdk/completion.bash.inc"
 
 # Kubernetes
 if command -v kubectl > /dev/null; then
@@ -47,6 +49,8 @@ export NVM_DIR="${HOME}/.nvm"
 [[ -s "${NVM_DIR}/bash_completion" ]] && \. "${NVM_DIR}/bash_completion"  # This loads nvm bash_completion
 
 # Golang
+export GOPATH="${HOME}/go"
+export PATH="${PATH}:${GOPATH}/bin"
 export GOENV_ROOT="${HOME}/.goenv"
 export PATH="${GOENV_ROOT}/bin:${PATH}"
 command -v goenv > /dev/null && eval "$(goenv init -)"
@@ -54,3 +58,5 @@ command -v gocomplete > /dev/null && complete -C gocomplete go
 
 # Ruby
 command -v rbenv > /dev/null && eval "$(rbenv init -)"
+
+[[ -f /usr/local/etc/bash_completion ]] && . /usr/local/etc/bash_completion
