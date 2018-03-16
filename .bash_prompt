@@ -71,7 +71,7 @@ KUBECONFIG="${HOME}/.kube/config"
 prompt_kube() {
   local kube_context='';
   local kube_context_namespace='';
-  if [[ -e "${KUBECONFIG}" ]]; then
+  if [[ -e "${KUBECONFIG}" ]] && command -v kubectl 2>/dev/null; then
     kube_context=$(grep '^current-context: ' "${KUBECONFIG}" | cut -d' ' -f2-)
 
     kube_context_namespace="$(kubectl config view --minify --output 'jsonpath={..namespace}')"
