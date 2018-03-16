@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # update path
-export PATH="/usr/local/bin:/usr/local/go/bin:${PATH}:${GOPATH}/bin:/usr/share/bcc/tools:/sbin"
+export PATH="${HOME}/bin:/usr/local/bin:/usr/local/go/bin:${PATH}:${GOPATH}/bin:/usr/share/bcc/tools:/sbin"
 
 # Rust
 export PATH="${PATH}:${HOME}/.cargo/bin"
