@@ -50,7 +50,7 @@ export NVM_DIR="${HOME}/.nvm"
 
 # Golang
 export GOPATH="${HOME}/go"
-export PATH="${PATH}:${GOPATH}/bin"
+export PATH="${PATH}:${GOPATH//://bin:}/bin"
 export GOENV_ROOT="${HOME}/.goenv"
 export PATH="${GOENV_ROOT}/bin:${PATH}"
 command -v goenv > /dev/null && eval "$(goenv init -)"
