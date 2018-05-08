@@ -12,6 +12,11 @@ export PATH="${PATH}:${HOME}/liveramp-bin"
 
 export WORKSPACE="${GOPATH}/src/git.liveramp.net/arbortech/go"
 export PATH="${WORKSPACE}/wbin:${PATH}"
+
+if [[ -d "/var/nfs/mounts/bin" ]]; then
+  export PATH="${PATH}:/var/nfs/mounts/bin"
+fi
+
 # export CGO_CPPFLAGS="-I/usr/local/include"
 # export CGO_LDFLAGS="-L/usr/local/lib"
 
