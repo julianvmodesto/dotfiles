@@ -11,3 +11,8 @@ jq(){
     --name jq \
     ${DOCKER_REPO_PREFIX}/jq "$@"
 }
+landscape(){
+  docker run -i --rm \
+    --name landscape \
+    ${DOCKER_REPO_PREFIX}/landscape "$@"
+}
