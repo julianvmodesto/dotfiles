@@ -1,0 +1,13 @@
+#!/bin/bash
+# Bash wrappers for docker run commands
+
+export DOCKER_REPO_PREFIX=julianvmodesto
+
+#
+# Container Aliases
+#
+jq(){
+  docker run -i --rm \
+    --name jq \
+    ${DOCKER_REPO_PREFIX}/jq "$@"
+}
