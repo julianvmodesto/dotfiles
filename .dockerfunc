@@ -11,6 +11,7 @@ jq(){
     --name jq \
     ${DOCKER_REPO_PREFIX}/jq "$@"
 }
+export -f jq
 landscape(){
   docker run -i --rm \
     --name landscape \
