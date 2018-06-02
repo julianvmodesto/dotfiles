@@ -165,7 +165,6 @@ base_min() {
 		pinentry-curses \
 		rxvt-unicode-256color \
 		scdaemon \
-		silversearcher-ag \
 		ssh \
 		strace \
 		sudo \
@@ -282,8 +281,8 @@ install_docker() {
 	)
 	chmod +x /usr/local/bin/docker*
 
-	curl -sSL https://raw.githubusercontent.com/jessfraz/dotfiles/master/etc/systemd/system/docker.service > /etc/systemd/system/docker.service
-	curl -sSL https://raw.githubusercontent.com/jessfraz/dotfiles/master/etc/systemd/system/docker.socket > /etc/systemd/system/docker.socket
+	curl -sSL https://raw.githubusercontent.com/julianvmodesto/dotfiles/master/etc/systemd/system/docker.service > /etc/systemd/system/docker.service
+	curl -sSL https://raw.githubusercontent.com/julianvmodesto/dotfiles/master/etc/systemd/system/docker.socket > /etc/systemd/system/docker.socket
 
 	systemctl daemon-reload
 	systemctl enable docker
@@ -327,73 +326,17 @@ install_golang() {
 	(
 	set -x
 	set +e
-	go get github.com/golang/lint/golint
-	go get golang.org/x/tools/cmd/cover
-	go get golang.org/x/review/git-codereview
-	go get golang.org/x/tools/cmd/goimports
-	go get golang.org/x/tools/cmd/gorename
-	go get golang.org/x/tools/cmd/guru
 
-	go get github.com/genuinetools/amicontained
-	go get github.com/genuinetools/apk-file
-	go get github.com/genuinetools/audit
-	go get github.com/genuinetools/certok
-	go get github.com/genuinetools/img
-	go get github.com/genuinetools/netns
-	go get github.com/genuinetools/pepper
-	go get github.com/genuinetools/reg
 	go get github.com/genuinetools/udict
 	go get github.com/genuinetools/weather
 
-	go get github.com/jessfraz/cliaoke
-	go get github.com/jessfraz/junk/sembump
-	go get github.com/jessfraz/pastebinit
 	go get github.com/jessfraz/secping
-	go get github.com/jessfraz/tdash
 
 	go get github.com/axw/gocov/gocov
 	go get github.com/crosbymichael/gistit
 	go get github.com/davecheney/httpstat
 	go get honnef.co/go/tools/cmd/staticcheck
 	go get github.com/google/gops
-
-	# Tools for vimgo.
-	go get github.com/jstemmer/gotags
-	go get github.com/nsf/gocode
-	go get github.com/rogpeppe/godef
-
-	aliases=( Azure/acs-engine Azure/draft genuinetools/contained.af genuinetools/binctr gl-prototypes/cmd-localfs docker/docker moby/buildkit opencontainers/runc )
-	for project in "${aliases[@]}"; do
-		owner=$(dirname "$project")
-		repo=$(basename "$project")
-		if [[ -d "${HOME}/${repo}" ]]; then
-			rm -rf "${HOME:?}/${repo}"
-		fi
-
-		mkdir -p "${GOPATH}/src/github.com/${owner}"
-
-		if [[ ! -d "${GOPATH}/src/github.com/${project}" ]]; then
-			(
-			# clone the repo
-			cd "${GOPATH}/src/github.com/${owner}"
-			git clone "https://github.com/${project}.git"
-			# fix the remote path, since our gitconfig will make it git@
-			cd "${GOPATH}/src/github.com/${project}"
-			git remote set-url origin "https://github.com/${project}.git"
-			)
-		else
-			echo "found ${project} already in gopath"
-		fi
-
-		# make sure we create the right git remotes
-		if [[ "$owner" != "jessfraz" ]]; then
-			(
-			cd "${GOPATH}/src/github.com/${project}"
-			git remote set-url --push origin no_push
-			git remote add jessfraz "https://github.com/jessfraz/${repo}.git"
-			)
-		fi
-	done
 
 	# do special things for k8s GOPATH
 	mkdir -p "${GOPATH}/src/k8s.io"
@@ -402,7 +345,7 @@ install_golang() {
 		git clone "https://github.com/kubernetes/${krepo}.git" "${GOPATH}/src/k8s.io/${krepo}"
 		cd "${GOPATH}/src/k8s.io/${krepo}"
 		git remote set-url --push origin no_push
-		git remote add jessfraz "https://github.com/jessfraz/${krepo}.git"
+		git remote add julianvmodesto "https://github.com/julianvmodesto/${krepo}.git"
 	done
 	)
 }
@@ -452,30 +395,6 @@ install_scripts() {
 	# install lolcat
 	curl -sSL https://raw.githubusercontent.com/tehmaze/lolcat/master/lolcat > /usr/local/bin/lolcat
 	chmod +x /usr/local/bin/lolcat
-
-
-	local scripts=( have light )
-
-	for script in "${scripts[@]}"; do
-		curl -sSL "https://misc.j3ss.co/binaries/$script" > "/usr/local/bin/${script}"
-		chmod +x "/usr/local/bin/${script}"
-	done
-}
-
-# install syncthing
-install_syncthing() {
-	# download syncthing binary
-	if [[ ! -f /usr/local/bin/syncthing ]]; then
-		curl -sSL https://misc.j3ss.co/binaries/syncthing > /usr/local/bin/syncthing
-		chmod +x /usr/local/bin/syncthing
-	fi
-
-	syncthing -upgrade
-
-	curl -sSL https://raw.githubusercontent.com/jessfraz/dotfiles/master/etc/systemd/system/syncthing@.service > /etc/systemd/system/syncthing@.service
-
-	systemctl daemon-reload
-	systemctl enable "syncthing@${TARGET_USER}"
 }
 
 # install wifi drivers
@@ -504,16 +423,13 @@ install_wmapps() {
 
 	# update clickpad settings
 	mkdir -p /etc/X11/xorg.conf.d/
-	curl -sSL https://raw.githubusercontent.com/jessfraz/dotfiles/master/etc/X11/xorg.conf.d/50-synaptics-clickpad.conf > /etc/X11/xorg.conf.d/50-synaptics-clickpad.conf
+	curl -sSL https://raw.githubusercontent.com/julianvmodesto/dotfiles/master/etc/X11/xorg.conf.d/50-synaptics-clickpad.conf > /etc/X11/xorg.conf.d/50-synaptics-clickpad.conf
 
 	# add xorg conf
-	curl -sSL https://raw.githubusercontent.com/jessfraz/dotfiles/master/etc/X11/xorg.conf > /etc/X11/xorg.conf
-
-	# get correct sound cards on boot
-	curl -sSL https://raw.githubusercontent.com/jessfraz/dotfiles/master/etc/modprobe.d/intel.conf > /etc/modprobe.d/intel.conf
+	curl -sSL https://raw.githubusercontent.com/julianvmodesto/dotfiles/master/etc/X11/xorg.conf > /etc/X11/xorg.conf
 
 	# pretty fonts
-	curl -sSL https://raw.githubusercontent.com/jessfraz/dotfiles/master/etc/fonts/local.conf > /etc/fonts/local.conf
+	curl -sSL https://raw.githubusercontent.com/julianvmodesto/dotfiles/master/etc/fonts/local.conf > /etc/fonts/local.conf
 
 	echo "Fonts file setup successfully now run:"
 	echo "	dpkg-reconfigure fontconfig-config"
@@ -529,7 +445,7 @@ get_dotfiles() {
 	cd "$HOME"
 
 	# install dotfiles from repo
-	git clone git@github.com:jessfraz/dotfiles.git "${HOME}/dotfiles"
+	git clone git@github.com:julianvmodesto/dotfiles.git "${HOME}/dotfiles"
 	cd "${HOME}/dotfiles"
 
 	# installs all the things
@@ -556,7 +472,7 @@ install_vim() {
 
 	# install .vim files
 	sudo rm -rf "${HOME}/.vim"
-	git clone --recursive git@github.com:jessfraz/.vim.git "${HOME}/.vim"
+	git clone --recursive git@github.com:julianvmodesto/.vim.git "${HOME}/.vim"
 	ln -snf "${HOME}/.vim/vimrc" "${HOME}/.vimrc"
 	sudo ln -snf "${HOME}/.vim" /root/.vim
 	sudo ln -snf "${HOME}/.vimrc" /root/.vimrc
@@ -593,63 +509,6 @@ install_vim() {
 	)
 }
 
-install_virtualbox() {
-	# check if we need to install libvpx1
-	PKG_OK=$(dpkg-query -W --showformat='${Status}\n' libvpx1 | grep "install ok installed")
-	echo "Checking for libvpx1: $PKG_OK"
-	if [ "" == "$PKG_OK" ]; then
-		echo "No libvpx1. Installing libvpx1."
-		jessie_sources=/etc/apt/sources.list.d/jessie.list
-		echo "deb http://httpredir.debian.org/debian jessie main contrib non-free" > "$jessie_sources"
-
-		apt update
-		apt install -y -t jessie libvpx1 \
-			--no-install-recommends
-
-		# cleanup the file that we used to install things from jessie
-		rm "$jessie_sources"
-	fi
-
-	echo "deb http://download.virtualbox.org/virtualbox/debian vivid contrib" >> /etc/apt/sources.list.d/virtualbox.list
-
-	curl -sSL https://www.virtualbox.org/download/oracle_vbox.asc | apt-key add -
-
-	apt update
-	apt install -y \
-		virtualbox-5.0 \
-	--no-install-recommends
-}
-
-install_vagrant() {
-	VAGRANT_VERSION=1.8.1
-
-	# if we are passing the version
-	if [[ ! -z "$1" ]]; then
-		export VAGRANT_VERSION=$1
-	fi
-
-	# check if we need to install virtualbox
-	PKG_OK=$(dpkg-query -W --showformat='${Status}\n' virtualbox | grep "install ok installed")
-	echo "Checking for virtualbox: $PKG_OK"
-	if [ "" == "$PKG_OK" ]; then
-		echo "No virtualbox. Installing virtualbox."
-		install_virtualbox
-	fi
-
-	tmpdir=$(mktemp -d)
-	(
-	cd "$tmpdir"
-	curl -sSL -o vagrant.deb "https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VAGRANT_VERSION}_x86_64.deb"
-	dpkg -i vagrant.deb
-	)
-
-	rm -rf "$tmpdir"
-
-	# install plugins
-	vagrant plugin install vagrant-vbguest
-}
-
-
 usage() {
 	echo -e "install.sh\\n\\tThis script installs my basic setup for a debian laptop\\n"
 	echo "Usage:"
@@ -662,8 +521,6 @@ usage() {
 	echo "  vim                                 - install vim specific dotfiles"
 	echo "  golang                              - install golang and packages"
 	echo "  scripts                             - install scripts"
-	echo "  syncthing                           - install syncthing"
-	echo "  vagrant                             - install vagrant and virtualbox"
 }
 
 main() {
@@ -709,11 +566,6 @@ main() {
 		install_golang "$2"
 	elif [[ $cmd == "scripts" ]]; then
 		install_scripts
-	elif [[ $cmd == "syncthing" ]]; then
-		get_user
-		install_syncthing
-	elif [[ $cmd == "vagrant" ]]; then
-		install_vagrant "$2"
 	else
 		usage
 	fi
