@@ -5,7 +5,7 @@ export GDK_SCALE=2
 export GDK_DPI_SCALE=0.5
 export QT_DEVICE_PIXEL_RATIO=2
 
-# export TERMINAL="urxvt";
+export TERMINAL="alacritty";
 
 # Make vim the default editor
 export EDITOR='vim'
