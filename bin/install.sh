@@ -472,7 +472,7 @@ install_vim() {
 
 	# install .vim files
 	sudo rm -rf "${HOME}/.vim"
-	git clone --recursive git@github.com:julianvmodesto/.vim.git "${HOME}/.vim"
+	git clone --recursive https://github.com/julianvmodesto/.vim.git "${HOME}/.vim"
 	ln -snf "${HOME}/.vim/vimrc" "${HOME}/.vimrc"
 	sudo ln -snf "${HOME}/.vim" /root/.vim
 	sudo ln -snf "${HOME}/.vimrc" /root/.vimrc
