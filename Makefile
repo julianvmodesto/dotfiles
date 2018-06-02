@@ -29,6 +29,12 @@ dotfiles:
 	ln -sfn $(CURDIR)/.gnupg/gpg-agent.conf $(HOME)/.gnupg/gpg-agent.conf;
 	mkdir -p $(HOME)/.config;
 	ln -snf $(CURDIR)/.i3 $(HOME)/.config/sway;
+	ln -snf $(CURDIR)/.bash_profile $(HOME)/.profile;
+	mkdir -p $(HOME)/.local/share;
+	ln -snf $(CURDIR)/.fonts $(HOME)/.local/share/fonts;
+	if [ -f /usr/local/bin/pinentry ]; then \
+		sudo ln -snf /usr/bin/pinentry /usr/local/bin/pinentry; \
+	fi;
 	ln -sfn $(CURDIR)/$(ALACRITTY) $(HOME)/.alacritty.yml
 	mkdir -p $(HOME)/.config/alacritty
 	ln -sfn $(CURDIR)/$(ALACRITTY) $(HOME)/.config/alacritty/alacritty.yml
