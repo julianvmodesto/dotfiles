@@ -1,5 +1,8 @@
 #!/bin/bash
 
+export GDK_SCALE=2
+export GDK_DPI_SCALE=0.5
+
 # Make vim the default editor
 export EDITOR='vim'
 export VISUAL='vim'
