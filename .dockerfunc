@@ -4,8 +4,47 @@
 export DOCKER_REPO_PREFIX=julianvmodesto
 
 #
+# Helper Functions
+#
+del_stopped(){
+	local name=$1
+	local state
+	state=$(docker inspect --format "{{.State.Running}}" "$name" 2>/dev/null)
+
+	if [[ "$state" == "false" ]]; then
+		docker rm "$name"
+	fi
+}
+#
 # Container Aliases
 #
+firefox(){
+  del_stopped firefox
+
+  docker run -d \
+    --memory 4gb \
+    --shm-size 2gb \
+    --net host \
+    --cpuset-cpus 0 \
+    -v /etc/localtime:/etc/localtime:ro \
+    -v /etc/machine-id:/etc/machine-id:ro \
+    -v /tmp/.X11-unix:/tmp/.X11-unix \
+    -v "${HOME}/.firefox/cache:/root/.cache/mozilla" \
+    -v "${HOME}/.firefox/mozilla:/root/.mozilla" \
+    -v "${HOME}/Downloads:/root/Downloads" \
+    -v "${HOME}/Pictures:/root/Pictures" \
+    -v "${HOME}/Torrents:/root/Torrents" \
+    -e "DISPLAY=unix${DISPLAY}" \
+    -e GDK_SCALE \
+    -e GDK_DPI_SCALE \
+    --device /dev/snd \
+    --device /dev/dri \
+    --name firefox \
+    ${DOCKER_REPO_PREFIX}/firefox "$@"
+
+  # exit current shell
+  exit 0
+}
 jq(){
   docker run -i --rm \
     --name jq \
