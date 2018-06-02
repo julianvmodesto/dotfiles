@@ -169,6 +169,7 @@ base_min() {
 		strace \
 		sudo \
 		tar \
+        tmux \
 		tree \
 		tzdata \
 		usbmuxd \
