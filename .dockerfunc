@@ -39,8 +39,14 @@ firefox(){
     -e GDK_DPI_SCALE \
     --device /dev/snd \
     --device /dev/dri \
+    --device /dev/bus/usb \
+    --group-add audio \
+    --group-add video \
     --name firefox \
     ${DOCKER_REPO_PREFIX}/firefox "$@"
+
+    # --device /dev/snd \
+    # --device /dev/dri \
 
   # exit current shell
   exit 0

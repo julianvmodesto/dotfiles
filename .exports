@@ -1,7 +1,11 @@
 #!/bin/bash
 
+# hidpi for gtk apps
 export GDK_SCALE=2
 export GDK_DPI_SCALE=0.5
+export QT_DEVICE_PIXEL_RATIO=2
+
+# export TERMINAL="urxvt";
 
 # Make vim the default editor
 export EDITOR='vim'
@@ -20,6 +24,12 @@ export LC_ALL="en_US.UTF-8";
 
 # Don’t clear the screen after quitting a manual page
 export MANPAGER="less -X";
+
+# if it's an ssh session export GPG_TTY
+if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]]; then
+	GPG_TTY=$(tty)
+	export GPG_TTY
+fi
 
 export PAGER='less'
 # https://www.topbug.net/blog/2016/09/27/make-gnu-less-more-powerful/

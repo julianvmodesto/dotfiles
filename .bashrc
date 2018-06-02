@@ -21,6 +21,11 @@ if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
   debian_chroot=$(cat /etc/debian_chroot)
 fi
 
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+	debian_chroot=$(cat /etc/debian_chroot)
+fi
+
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
   xterm-color) color_prompt=yes;;
@@ -63,13 +68,33 @@ esac
 # sources /etc/bash.bashrc).
 if ! shopt -oq posix; then
   if [[ -f /usr/share/bash-completion/bash_completion ]]; then
-    # shellcheck disable=
-    . /usr/share/bash-completion/bash_completion
+      # shellcheck source=/dev/null
+      . /usr/share/bash-completion/bash_completion
   elif [[ -f /etc/bash_completion ]]; then
-    # shellcheck disable=
-    . /etc/bash_completion
+      # shellcheck source=/dev/null
+      . /etc/bash_completion
+  elif [[ -f /usr/local/etc/bash_completion ]]; then
+      # shellcheck source=/dev/null
+      . /usr/local/etc/bash_completion
   fi
 fi
+
+# This function checks whether we have a given program on the system.
+#
+_have()
+{
+    # Completions for system administrator commands are installed as well in
+    # case completion is attempted via `sudo command ...'.
+    PATH=$PATH:/usr/sbin:/sbin:/usr/local/sbin type $1 &>/dev/null
+}
+# Backwards compatibility for compat completions that use have().
+# @deprecated should no longer be used; generally not needed with dynamically
+#             loaded completions, and _have is suitable for runtime use.
+have()
+{
+    unset -v have
+    _have $1 && have=yes
+}
 if [[ -d /etc/bash_completion.d ]]; then
   for file in /etc/bash_completion.d/* ; do
     # shellcheck disable=
@@ -77,27 +102,19 @@ if [[ -d /etc/bash_completion.d ]]; then
   done
 fi
 
-if [[ -f "${HOME}/.bash_profile" ]]; then
-  # shellcheck disable=
-  source "${HOME}/.bash_profile"
-fi
-
 # bash vi editting
 # http://www.catonmat.net/blog/bash-vi-editing-mode-cheat-sheet/
 set -o vi
 
-# Java
-export JAVA_HOME=${JAVA_HOME:=/usr/lib/jvm/java-8-oracle}
-
-# use a tty for gpg
-# solves error: "gpg: signing failed: Inappropriate ioctl for device"
-GPG_TTY=$(tty)
-export GPG_TTY
 # Start the gpg-agent if not already running
 if ! pgrep -x -u "${USER}" gpg-agent >/dev/null 2>&1; then
   gpg-connect-agent /bye >/dev/null 2>&1
   gpg-connect-agent updatestartuptty /bye >/dev/null
 fi
+# use a tty for gpg
+# solves error: "gpg: signing failed: Inappropriate ioctl for device"
+GPG_TTY=$(tty)
+export GPG_TTY
 # Set SSH to use gpg-agent
 unset SSH_AGENT_PID
 if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
