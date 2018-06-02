@@ -39,7 +39,7 @@ fi
 
 mac_docker() {
   # Insert Docker into your shell using minikube.
-  status=$(minikube status --format={{.ClusterStatus}} 2>/dev/null)
+  status=$(minikube status --format="{{.ClusterStatus}}" 2>/dev/null)
   if [ "$status" == "Running" ]; then
     eval $(minikube docker-env)
   fi
@@ -56,6 +56,6 @@ esac
 jump_to() {
   r=$1; shift
   e=$1; shift
-  ssh -At $(curl -s http://consul-server01.liveramp.net:8500/v1/kv/aws/$r/$e/bastion?raw) $*
+  ssh -At $(curl -s "http://consul-server01.liveramp.net:8500/v1/kv/aws/$r/$e/bastion?raw") $*
 }
 

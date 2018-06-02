@@ -22,8 +22,8 @@ fi
 
 # macOS Homebrew bash completion
 if [[ -f /usr/local/etc/bash_completion ]]; then
-  # shellcheck disable=
-  . /usr/local/etc/bash_completion
+  # shellcheck disable=SC1090,SC1091
+  source /usr/local/etc/bash_completion
 fi
 
 # Google Cloud SDK
@@ -32,17 +32,18 @@ fi
 
 # Kubernetes
 if command -v kubectl > /dev/null; then
-  # shellcheck disable=
+  # shellcheck disable=SC1090,SC1091
   source <(kubectl completion bash)
 fi
 
 # Kops
 if command -v kops > /dev/null; then
-  # shellcheck disable=
+  # shellcheck disable=SC1090,SC1091
   source <(kops completion bash)
 fi
 
 # fzf
+# shellcheck disable=SC1090,SC1091
 [[ -f ~/.fzf.bash ]] && source ~/.fzf.bash
 
 # Node

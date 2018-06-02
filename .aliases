@@ -8,7 +8,7 @@ alias g="git"
 command -v pbcopy > /dev/null || alias pbcopy='xclip -selection clipboard'
 command -v pbpaste > /dev/null || alias pbpaste='xclip -selection clipboard -o'
 
-alias shrug="echo '¯\_(ツ)_/¯' | pbcopy"
+alias shrug="echo '¯\\_(ツ)_/¯' | pbcopy"
 
 # Detect which `ls` flavor is in use
 if ls --color > /dev/null 2>&1; then # GNU `ls`
