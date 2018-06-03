@@ -117,8 +117,15 @@ GPG_TTY=$(tty)
 export GPG_TTY
 # Set SSH to use gpg-agent
 unset SSH_AGENT_PID
-if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+GPG_SSH_AUTH_SOCK="/run/user/1000/gnupg/S.gpg-agent.ssh"
+if [[ -S "${GPG_SSH_AUTH_SOCK}" ]]; then
+  export SSH_AUTH_SOCK="${GPG_SSH_AUTH_SOCK}"
+elif [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
   export SSH_AUTH_SOCK="${HOME}/.gnupg/S.gpg-agent.ssh"
 fi
 # add alias for ssh to update the tty
 alias ssh="gpg-connect-agent updatestartuptty /bye >/dev/null; ssh"
+
+if [[ -S "/var/run/dbus/system_bus_socket" ]]; then
+  export DBUS_SESSION_BUS_ADDRESS="/var/run/dbus/system_bus_socket"
+fi
