@@ -77,18 +77,18 @@ notify_osd(){
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     --net none \
     -v /etc \
-    -v "${HOME}/.dbus:/home/user/.dbus" \
-    -v "${HOME}/.cache/dconf:/home/user/.cache/dconf" \
+    -v /home/user/.dbus \
+    -v /home/user/.cache/dconf \
     -e "DISPLAY=unix${DISPLAY}" \
     --name notify_osd \
     ${DOCKER_REPO_PREFIX}/notify-osd
 }
-alias notify-send=notify_send
-notify_send(){
+notify-send(){
   relies_on notify_osd
   local args=${*:2}
   docker exec -i notify_osd notify-send "$1" "${args}"
 }
+export -f notify-send
 zeal() {
   del_stopped zeal
 
