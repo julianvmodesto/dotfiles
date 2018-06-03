@@ -27,7 +27,6 @@ firefox(){
     --net host \
     --cpuset-cpus 0 \
     -v /etc/localtime:/etc/localtime:ro \
-    -v /etc/machine-id:/etc/machine-id:ro \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     -v "${HOME}/.firefox/cache:/root/.cache/mozilla" \
     -v "${HOME}/.firefox/mozilla:/root/.mozilla" \
@@ -58,4 +57,17 @@ landscape(){
   docker run -i --rm \
     --name landscape \
     ${DOCKER_REPO_PREFIX}/landscape "$@"
+}
+zeal() {
+  del_stopped zeal
+
+  docker run -d \
+    -v /tmp/.X11-unix:/tmp/.X11-unix \
+    -e "DISPLAY=unix${DISPLAY}" \
+    --device /dev/dri \
+    --name=zeal \
+    ${DOCKER_REPO_PREFIX}/zeal
+
+  # exit current shell
+  exit 0
 }
