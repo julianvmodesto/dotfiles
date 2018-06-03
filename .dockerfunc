@@ -22,8 +22,8 @@ firefox(){
   del_stopped firefox
 
   docker run -d \
-    --memory 4gb \
-    --shm-size 2gb \
+    --memory 3gb \
+    --shm-size 1gb \
     --net host \
     --cpuset-cpus 0 \
     -v /etc/localtime:/etc/localtime:ro \
@@ -44,9 +44,6 @@ firefox(){
     --group-add video \
     --name firefox \
     ${DOCKER_REPO_PREFIX}/firefox "$@"
-
-    # --device /dev/snd \
-    # --device /dev/dri \
 
   # exit current shell
   exit 0
