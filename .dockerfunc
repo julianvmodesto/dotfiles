@@ -102,6 +102,23 @@ pulseaudio(){
     --name pulseaudio \
     ${DOCKER_REPO_PREFIX}/pulseaudio
 }
+slack(){
+  del_stopped slack
+
+  docker run -d \
+    -v /etc/localtime:/etc/localtime:ro \
+    -v /tmp/.X11-unix:/tmp/.X11-unix \
+    -e "DISPLAY=unix${DISPLAY}" \
+    --memory 2gb \
+    --device /dev/snd \
+    --device /dev/dri \
+    --group-add audio \
+    --group-add video \
+    -v "${HOME}/.slack:/root/.config/Slack" \
+    --ipc="host" \
+    --name slack \
+    ${DOCKER_REPO_PREFIX}/slack "$@"
+}
 zeal() {
   del_stopped zeal
 
