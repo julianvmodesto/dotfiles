@@ -163,6 +163,7 @@ base_min() {
 		net-tools \
 		neovim \
 		pinentry-curses \
+        rsync \
 		rxvt-unicode-256color \
 		scdaemon \
 		ssh \
