@@ -48,15 +48,15 @@ setup_sources_min() {
 
   # hack for latest git (don't judge)
   cat <<-EOF > /etc/apt/sources.list.d/git-core.list
-  deb http://ppa.launchpad.net/git-core/ppa/ubuntu xenial main
-  deb-src http://ppa.launchpad.net/git-core/ppa/ubuntu xenial main
-  EOF
+deb http://ppa.launchpad.net/git-core/ppa/ubuntu xenial main
+deb-src http://ppa.launchpad.net/git-core/ppa/ubuntu xenial main
+EOF
 
   # neovim
   cat <<-EOF > /etc/apt/sources.list.d/neovim.list
-  deb http://ppa.launchpad.net/neovim-ppa/unstable/ubuntu xenial main
-  deb-src http://ppa.launchpad.net/neovim-ppa/unstable/ubuntu xenial main
-  EOF
+deb http://ppa.launchpad.net/neovim-ppa/unstable/ubuntu xenial main
+deb-src http://ppa.launchpad.net/neovim-ppa/unstable/ubuntu xenial main
+EOF
 
   # add the git-core ppa gpg key
   apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys E1DD270288B4E6030699E45FA1715D88E1DF1F24
@@ -70,35 +70,35 @@ setup_sources_min() {
 }
 
 # sets up apt sources
-# assumes you are going to use debian buster
+# assumes you are going to use debian stretch
 setup_sources() {
   setup_sources_min;
 
   cat <<-EOF > /etc/apt/sources.list
-  deb http://httpredir.debian.org/debian buster main contrib non-free
-  deb-src http://httpredir.debian.org/debian/ buster main contrib non-free
-  deb http://httpredir.debian.org/debian/ buster-updates main contrib non-free
-  deb-src http://httpredir.debian.org/debian/ buster-updates main contrib non-free
-  deb http://security.debian.org/ buster/updates main contrib non-free
-  deb-src http://security.debian.org/ buster/updates main contrib non-free
-  #deb http://httpredir.debian.org/debian/ jessie-backports main contrib non-free
-  #deb-src http://httpredir.debian.org/debian/ jessie-backports main contrib non-free
-  deb http://httpredir.debian.org/debian experimental main contrib non-free
-  deb-src http://httpredir.debian.org/debian experimental main contrib non-free
-  # yubico
-  deb http://ppa.launchpad.net/yubico/stable/ubuntu xenial main
-  deb-src http://ppa.launchpad.net/yubico/stable/ubuntu xenial main
-  # tlp: Advanced Linux Power Management
-  # http://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html
-  deb http://repo.linrunner.de/debian sid main
-  EOF
+deb http://httpredir.debian.org/debian stretch main contrib non-free
+deb-src http://httpredir.debian.org/debian/ stretch main contrib non-free
+deb http://httpredir.debian.org/debian/ stretch-updates main contrib non-free
+deb-src http://httpredir.debian.org/debian/ stretch-updates main contrib non-free
+deb http://security.debian.org/ stretch/updates main contrib non-free
+deb-src http://security.debian.org/ stretch/updates main contrib non-free
+#deb http://httpredir.debian.org/debian/ jessie-backports main contrib non-free
+#deb-src http://httpredir.debian.org/debian/ jessie-backports main contrib non-free
+deb http://httpredir.debian.org/debian experimental main contrib non-free
+deb-src http://httpredir.debian.org/debian experimental main contrib non-free
+# yubico
+deb http://ppa.launchpad.net/yubico/stable/ubuntu xenial main
+deb-src http://ppa.launchpad.net/yubico/stable/ubuntu xenial main
+# tlp: Advanced Linux Power Management
+# http://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html
+deb http://repo.linrunner.de/debian sid main
+EOF
 
   # add docker apt repo
   cat <<-EOF > /etc/apt/sources.list.d/docker.list
-  deb https://apt.dockerproject.org/repo debian-buster main
-  deb https://apt.dockerproject.org/repo debian-buster testing
-  deb https://apt.dockerproject.org/repo debian-buster experimental
-  EOF
+deb https://apt.dockerproject.org/repo debian-stretch main
+deb https://apt.dockerproject.org/repo debian-stretch testing
+deb https://apt.dockerproject.org/repo debian-stretch experimental
+EOF
 
   # Create an environment variable for the correct distribution
   CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
