@@ -7,13 +7,24 @@ export DOCKER_REPO_PREFIX=julianvmodesto
 # Helper Functions
 #
 del_stopped(){
-	local name=$1
-	local state
-	state=$(docker inspect --format "{{.State.Running}}" "$name" 2>/dev/null)
+  local name=$1
+  local state
+  state=$(docker inspect --format "{{.State.Running}}" "$name" 2>/dev/null)
 
-	if [[ "$state" == "false" ]]; then
-		docker rm "$name"
-	fi
+  if [[ "$state" == "false" ]]; then
+    docker rm "$name"
+  fi
+}
+relies_on(){
+  for container in "$@"; do
+    local state
+    state=$(docker inspect --format "{{.State.Running}}" "$container" 2>/dev/null)
+
+    if [[ "$state" == "false" ]] || [[ "$state" == "" ]]; then
+      echo "$container is not running, starting it for you."
+      $container
+    fi
+  done
 }
 #
 # Container Aliases
@@ -57,6 +68,26 @@ landscape(){
   docker run -i --rm \
     --name landscape \
     ${DOCKER_REPO_PREFIX}/landscape "$@"
+}
+notify_osd(){
+  del_stopped notify_osd
+
+  docker run -d \
+    -v /etc/localtime:/etc/localtime:ro \
+    -v /tmp/.X11-unix:/tmp/.X11-unix \
+    --net none \
+    -v /etc \
+    -v "${HOME}/.dbus:/home/user/.dbus" \
+    -v "${HOME}/.cache/dconf:/home/user/.cache/dconf" \
+    -e "DISPLAY=unix${DISPLAY}" \
+    --name notify_osd \
+    ${DOCKER_REPO_PREFIX}/notify-osd
+}
+alias notify-send=notify_send
+notify_send(){
+  relies_on notify_osd
+  local args=${*:2}
+  docker exec -i notify_osd notify-send "$1" "${args}"
 }
 zeal() {
   del_stopped zeal
