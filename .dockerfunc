@@ -31,6 +31,7 @@ relies_on(){
 #
 firefox(){
   del_stopped firefox
+  relies_on pulseaudio
 
   docker run -d \
     --memory 3gb \
@@ -45,6 +46,7 @@ firefox(){
     -v "${HOME}/Pictures:/root/Pictures" \
     -v "${HOME}/Torrents:/root/Torrents" \
     -e "DISPLAY=unix${DISPLAY}" \
+    -e "PULSE_SERVER=localhost" \
     -e GDK_SCALE \
     -e GDK_DPI_SCALE \
     --device /dev/snd \
@@ -54,9 +56,6 @@ firefox(){
     --group-add video \
     --name firefox \
     ${DOCKER_REPO_PREFIX}/firefox "$@"
-
-  # exit current shell
-  exit 0
 }
 jq(){
   docker run -i --rm \
@@ -89,6 +88,19 @@ notify-send(){
   docker exec -i notify_osd notify-send "$1" "${args}"
 }
 export -f notify-send
+pulseaudio(){
+  del_stopped pulseaudio
+
+  docker run -d \
+    -v /etc/localtime:/etc/localtime:ro \
+    -v /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket \
+    --device /dev/snd \
+    -p 4713:4713 \
+    --restart always \
+    --group-add audio \
+    --name pulseaudio \
+    ${DOCKER_REPO_PREFIX}/pulseaudio
+}
 zeal() {
   del_stopped zeal
 
