@@ -93,13 +93,6 @@ deb-src http://ppa.launchpad.net/yubico/stable/ubuntu xenial main
 deb http://repo.linrunner.de/debian sid main
 EOF
 
-  # add docker apt repo
-  cat <<-EOF > /etc/apt/sources.list.d/docker.list
-deb https://apt.dockerproject.org/repo debian-stretch main
-deb https://apt.dockerproject.org/repo debian-stretch testing
-deb https://apt.dockerproject.org/repo debian-stretch experimental
-EOF
-
   # Create an environment variable for the correct distribution
   CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
   export CLOUD_SDK_REPO
@@ -115,9 +108,6 @@ EOF
 
   # Import the Google Chrome public key
   curl https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
-
-  # add docker gpg key
-  apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
 
   # add the yubico ppa gpg key
   apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 3653E21064B19D134466702E43D5C49532CBA1A9
