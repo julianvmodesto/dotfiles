@@ -70,17 +70,17 @@ EOF
 }
 
 # sets up apt sources
-# assumes you are going to use debian stretch
+# assumes you are going to use debian buster
 setup_sources() {
   setup_sources_min;
 
   cat <<-EOF > /etc/apt/sources.list
-deb http://httpredir.debian.org/debian stretch main contrib non-free
-deb-src http://httpredir.debian.org/debian/ stretch main contrib non-free
-deb http://httpredir.debian.org/debian/ stretch-updates main contrib non-free
-deb-src http://httpredir.debian.org/debian/ stretch-updates main contrib non-free
-deb http://security.debian.org/ stretch/updates main contrib non-free
-deb-src http://security.debian.org/ stretch/updates main contrib non-free
+deb http://httpredir.debian.org/debian buster main contrib non-free
+deb-src http://httpredir.debian.org/debian/ buster main contrib non-free
+deb http://httpredir.debian.org/debian/ buster-updates main contrib non-free
+deb-src http://httpredir.debian.org/debian/ buster-updates main contrib non-free
+deb http://security.debian.org/ buster/updates main contrib non-free
+deb-src http://security.debian.org/ buster/updates main contrib non-free
 #deb http://httpredir.debian.org/debian/ jessie-backports main contrib non-free
 #deb-src http://httpredir.debian.org/debian/ jessie-backports main contrib non-free
 deb http://httpredir.debian.org/debian experimental main contrib non-free
@@ -247,7 +247,7 @@ setup_sudo() {
 # and adds necessary items to boot params
 install_docker() {
   # create docker group
-  sudo groupadd docker
+  sudo groupadd docker || true
   sudo gpasswd -a "$TARGET_USER" docker
 
   # Include contributed completions
