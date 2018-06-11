@@ -117,7 +117,7 @@ GPG_TTY=$(tty)
 export GPG_TTY
 # Set SSH to use gpg-agent
 unset SSH_AGENT_PID
-GPG_SSH_AUTH_SOCK="/run/user/1000/gnupg/S.gpg-agent.ssh"
+GPG_SSH_AUTH_SOCK="/run/user/$(id -u)/gnupg/S.gpg-agent.ssh"
 if [[ -S "${GPG_SSH_AUTH_SOCK}" ]]; then
   export SSH_AUTH_SOCK="${GPG_SSH_AUTH_SOCK}"
 elif [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
