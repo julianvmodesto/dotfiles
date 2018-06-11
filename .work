@@ -1,7 +1,9 @@
 #!/bin/bash
 
+export KUBECONFIG="/keybase/private/julianvmodesto/kubeconfig"
+
 if [[ -f "${HOME}/.liveramp_profile" ]]; then
-  source "${HOME}/.liveramp_profile"
+  # source "${HOME}/.liveramp_profile"
 fi
 
 if [[ -f "${HOME}/.work_secrets" ]]; then
@@ -15,17 +17,6 @@ export PATH="${WORKSPACE}/wbin:${PATH}"
 
 if [[ -d "/var/nfs/mounts/bin" ]]; then
   export PATH="${PATH}:/var/nfs/mounts/bin"
-fi
-
-# export CGO_CPPFLAGS="-I/usr/local/include"
-# export CGO_LDFLAGS="-L/usr/local/lib"
-
-# Flyway setup.
-export PATH=$PATH:$HOME/flyway
-
-if [ ! -d "${HOME}/.kube" ]; then
-  echo -e "Kube config not found. Running setup-gcloud.sh"
-  "${WORKSPACE}/scripts/setup-gcloud.sh"
 fi
 
 git config --global user.email julian.modesto@liveramp.com
