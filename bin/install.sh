@@ -147,7 +147,7 @@ base_min() {
     libc6-dev \
     libimobiledevice6 \
     libreadline-dev \
-    libssl-dev \
+    libssl1.0-dev \
     locales \
     lsof \
     make \
