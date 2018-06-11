@@ -457,6 +457,7 @@ get_dotfiles() {
   mkdir -p ~/Torrents
   )
 
+  install_ruby
   install_vim;
 }
 
@@ -504,6 +505,15 @@ install_vim() {
   )
 }
 
+install_ruby() {
+  # Install rbenv
+  git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+  cd ~/.rbenv && src/configure && make -C src || true
+  ~/.rbenv/bin/rbenv init
+  mkdir -p "$(rbenv root)"/plugins
+  git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
+}
+
 usage() {
   echo -e "install.sh\\n\\tThis script installs my basic setup for a debian laptop\\n"
   echo "Usage:"
@@ -514,6 +524,7 @@ usage() {
   echo "  wm                                  - install window manager/desktop pkgs"
   echo "  dotfiles                            - get dotfiles"
   echo "  vim                                 - install vim specific dotfiles"
+  echo "  ruby                                - install ruby"
   echo "  golang                              - install golang and packages"
   echo "  scripts                             - install scripts"
 }
@@ -557,6 +568,8 @@ main() {
     get_dotfiles
   elif [[ $cmd == "vim" ]]; then
     install_vim
+  elif [[ $cmd == "ruby" ]]; then
+    install_ruby "$2"
   elif [[ $cmd == "golang" ]]; then
     install_golang "$2"
   elif [[ $cmd == "scripts" ]]; then
