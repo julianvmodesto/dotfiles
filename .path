@@ -64,6 +64,8 @@ export NVM_DIR="${HOME}/.nvm"
 command -v rbenv > /dev/null && eval "$(rbenv init -)"
 
 # Java
-export JAVA_HOME=${JAVA_HOME:=/usr/lib/jvm/java-8-oracle}
+JAVA="java"
+command -v javac > /dev/null && JAVA="javac"
+export JAVA_HOME=${JAVA_HOME-"$(dirname $(dirname $(readlink -f $(which $JAVA))))"}
 
 [[ -f /usr/local/etc/bash_completion ]] && . /usr/local/etc/bash_completion
