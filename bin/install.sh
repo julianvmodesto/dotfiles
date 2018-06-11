@@ -146,6 +146,8 @@ base_min() {
     less \
     libc6-dev \
     libimobiledevice6 \
+    libreadline-dev \
+    libssl-dev \
     locales \
     lsof \
     make \
@@ -169,6 +171,7 @@ base_min() {
     xcompmgr \
     xz-utils \
     zip \
+    zlib1g-dev \
     --no-install-recommends
 
     apt autoremove
