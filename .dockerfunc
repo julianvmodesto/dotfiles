@@ -166,6 +166,22 @@ slack(){
     --name slack \
     ${DOCKER_REPO_PREFIX}/slack "$@"
 }
+synergys(){
+  del_stopped synergys
+
+  docker run -d \
+    --memory 150Mb \
+    -v /tmp/.X11-unix:/tmp/.X11-unix \
+    -v "${HOME}/.synergy.conf:/config/synergy.conf" \
+    -v "${HOME}/.synergy:/root/.synergy" \
+    -e "DISPLAY=unix${DISPLAY}" \
+    -p 24800:24800 \
+    --restart always \
+    --name synergys \
+    ${DOCKER_REPO_PREFIX}/synergy \
+    build/bin/synergys \
+    -f --address 0.0.0.0:24800 --debug INFO --no-tray --name synergys --enable-crypto -c /config/synergy.conf
+}
 zeal() {
   del_stopped zeal
 
