@@ -54,6 +54,14 @@ etc: ## Installs the etc directory files.
 work:
 	ln -sfn $(CURDIR)/.synergy.work.conf $(HOME)/.synergy.conf
 
+.PHONY: synergy
+synergy:
+	# https://github.com/symless/synergy-core/wiki/Security#linux
+	mkdir -p ~/.synergy/SSL/Fingerprints
+	openssl req -x509 -nodes -days 365 -subj /CN=Synergy -newkey rsa:1024 -keyout ~/.synergy/SSL/Synergy.pem -out ~/.synergy/SSL/Synergy.pem
+	openssl x509 -fingerprint -sha1 -noout -in ~/.synergy/SSL/Synergy.pem > ~/.synergy/SSL/Fingerprints/Local.txt
+	sed -e "s/.*=//" -i ~/.synergy/SSL/Fingerprints/Local.txt
+
 .PHONY: test
 test: shellcheck ## Runs all the tests on the files in the repository.
 
