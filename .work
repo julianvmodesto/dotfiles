@@ -21,6 +21,7 @@ fi
 
 git config --global user.email julian.modesto@liveramp.com
 git config --global hub.host git.liveramp.net
+git config --global url.ssh://git@git.liveramp.net/.insteadOf https://git.liveramp.net/
 
 complete -F _make wmake
 complete -F _make ./wmake
