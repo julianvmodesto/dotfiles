@@ -20,7 +20,7 @@ bin: ## Installs the bin directory files.
 .PHONY: dotfiles
 dotfiles:
 	# add aliases for dotfiles
-	for file in $(shell find $(CURDIR) -name ".*" -not -name ".gitignore" -not -name ".travis.yml" -not -name ".git" -not -name ".*.swp" -not -name ".gnupg" -not -name ".alacritty*" -not -name ".X*" -not -name ".x*" ); do \
+	for file in $(shell find $(CURDIR) -name ".*" -not -name ".gitignore" -not -name ".travis.yml" -not -name ".git" -not -name ".*.swp" -not -name ".gnupg" -not -name ".alacritty*"); do \
 		f=$$(basename $$file); \
 		ln -sfn $$file $(HOME)/$$f; \
 	done; \
@@ -29,6 +29,7 @@ dotfiles:
 	ln -sfn $(CURDIR)/.gnupg/gpg-agent.conf $(HOME)/.gnupg/gpg-agent.conf;
 	ln -sfn $(CURDIR)/.gnupg/scdaemon.conf $(HOME)/.gnupg/scdaemon.conf;
 	mkdir -p $(HOME)/.config;
+	ln -snf $(CURDIR)/.i3 $(HOME)/.config/sway;
 	ln -snf $(CURDIR)/.bash_profile $(HOME)/.profile;
 	mkdir -p $(HOME)/.local/share;
 	ln -snf $(CURDIR)/.fonts $(HOME)/.local/share/fonts;
@@ -38,15 +39,6 @@ dotfiles:
 	ln -sfn $(CURDIR)/$(ALACRITTY) $(HOME)/.alacritty.yml
 	mkdir -p $(HOME)/.config/alacritty
 	ln -sfn $(CURDIR)/$(ALACRITTY) $(HOME)/.config/alacritty/alacritty.yml
-
-.PHONY: wm
-wm: ## Installs window manager files
-	for file in $(shell find $(CURDIR) -name ".x*" -name ".X*"); do \
-		f=$$(basename $$file); \
-		ln -sfn $$file $(HOME)/$$f; \
-	done; \
-	mkdir -p $(HOME)/.config;
-	ln -snf $(CURDIR)/.i3 $(HOME)/.config/sway;
 
 .PHONY: etc
 etc: ## Installs the etc directory files.
