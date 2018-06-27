@@ -71,7 +71,7 @@ prompt_git() {
 	fi;
 }
 
-KUBECONFIG="${HOME}/.kube/config"
+KUBECONFIG="${KUBECONFIG:-${HOME}/.kube/config}"
 prompt_kube() {
   local kube_context='';
   local kube_context_namespace='';
