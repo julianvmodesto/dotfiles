@@ -2,10 +2,6 @@
 
 export KUBECONFIG="/keybase/private/julianvmodesto/kubeconfig"
 
-if [[ -f "${HOME}/.liveramp_profile" ]]; then
-  # source "${HOME}/.liveramp_profile"
-fi
-
 if [[ -f "${HOME}/.work_secrets" ]]; then
   source "${HOME}/.work_secrets"
 fi
