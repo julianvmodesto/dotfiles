@@ -3,13 +3,19 @@
 # Load the shell dotfiles, and then some:
 # * ~/.path can be used to extend `$PATH`.
 # * ~/.extra can be used for other settings you don’t want to commit.
-for file in ~/.{bashrc,bash_prompt,aliases,functions,path,dockerfunc,extra,exports,work}; do
+for file in ~/.{bashrc,bash_prompt,aliases,functions,path,extra,exports,work}; do
   if [[ -r "$file" ]] && [[ -f "$file" ]]; then
     # shellcheck disable=
     source "$file"
   fi
 done
 unset file
+
+case "$(uname)" in
+  Linux)
+    . ~/.dockerfunc
+  ;;
+esac
 
 # Case-insensitive globbing (used in pathname expansion)
 shopt -s nocaseglob
