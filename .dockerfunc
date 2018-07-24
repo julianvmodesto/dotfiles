@@ -74,7 +74,6 @@ firefox(){
   relies_on pulseaudio
 
   docker run -d \
-    --memory 3gb \
     --shm-size 2gb \
     --net host \
     --ipc="host" \
@@ -173,7 +172,6 @@ synergys(){
   del_stopped synergys
 
   docker run -d \
-    --memory 150Mb \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     -v "${HOME}/.synergy.conf:/config/synergy.conf" \
     -v "${HOME}/.synergy:/root/.synergy" \
