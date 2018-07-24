@@ -50,6 +50,9 @@ if command -v kubectl > /dev/null; then
   source <(kubectl completion bash)
 fi
 
+# k8s.io/kubernetes etcd
+export PATH="${PATH}:${GOPATH}/src/k8s.io/kubernetes/third_party/etcd"
+
 # Kops
 if command -v kops > /dev/null; then
   # shellcheck disable=SC1090,SC1091
