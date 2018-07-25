@@ -39,6 +39,7 @@ dotfiles:
 	ln -sfn $(CURDIR)/$(ALACRITTY) $(HOME)/.alacritty.yml
 	mkdir -p $(HOME)/.config/alacritty
 	ln -sfn $(CURDIR)/$(ALACRITTY) $(HOME)/.config/alacritty/alacritty.yml
+	mkdir -p $(HOME)/.icons/default
 
 .PHONY: etc
 etc: ## Installs the etc directory files.
