@@ -2,7 +2,7 @@
 Description=Hibernate after suspend
 Documentation=https://wiki.debian.org/SystemdSuspendSedation
 Conflicts=hibernate.target hybrid-sleep.target
-Before=suspend.target
+Before=sleep.target
 StopWhenUnneeded=true
 
 [Service]
