@@ -125,6 +125,7 @@ base_min() {
     automake \
     bash-completion \
     bc \
+    build-essential \
     bzip2 \
     ca-certificates \
     coreutils \
@@ -132,6 +133,7 @@ base_min() {
     dnsutils \
     file \
     findutils \
+    g++ \
     gcc \
     git \
     gnupg \
@@ -151,6 +153,7 @@ base_min() {
     locales \
     lsof \
     make \
+    mercurial \
     mount \
     net-tools \
     neovim \
@@ -514,6 +517,11 @@ install_ruby() {
   git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
 }
 
+# install rust
+install_rust() {
+  curl https://sh.rustup.rs -sSf | sh
+}
+
 usage() {
   echo -e "install.sh\\n\\tThis script installs my basic setup for a debian laptop\\n"
   echo "Usage:"
@@ -525,6 +533,7 @@ usage() {
   echo "  dotfiles                            - get dotfiles"
   echo "  vim                                 - install vim specific dotfiles"
   echo "  ruby                                - install ruby"
+  echo "  rust                                - install rust"
   echo "  golang                              - install golang and packages"
   echo "  scripts                             - install scripts"
 }
@@ -570,6 +579,8 @@ main() {
     install_vim
   elif [[ $cmd == "ruby" ]]; then
     install_ruby "$2"
+  elif [[ $cmd == "rust" ]]; then
+    install_rust
   elif [[ $cmd == "golang" ]]; then
     install_golang "$2"
   elif [[ $cmd == "scripts" ]]; then
