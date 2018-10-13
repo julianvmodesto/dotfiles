@@ -128,6 +128,7 @@ if ! [[ -n "${SSH_CLIENT}" ]] && ! [[ -n "${SSH_TTY}" ]]; then
   fi
   # add alias for ssh to update the tty
   alias ssh="gpg-connect-agent updatestartuptty /bye >/dev/null; ssh"
+  export GIT_SSH_COMMAND="gpg-connect-agent updatestartuptty /bye >/dev/null; ssh"
 
   if [[ -S "/var/run/dbus/system_bus_socket" ]]; then
     export DBUS_SESSION_BUS_ADDRESS="/var/run/dbus/system_bus_socket"
