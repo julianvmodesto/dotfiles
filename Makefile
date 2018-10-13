@@ -20,7 +20,7 @@ bin: ## Installs the bin directory files.
 .PHONY: dotfiles
 dotfiles:
 	# add aliases for dotfiles
-	for file in $(shell find $(CURDIR) -name ".*" -not -name ".gitignore" -not -name ".travis.yml" -not -name ".git" -not -name ".*.swp" -not -name ".gnupg" -not -name ".alacritty*" -not -name ".synergy*"); do \
+	for file in $(shell find $(CURDIR) -name ".*" -not -name ".work" -not -name ".gitignore" -not -name ".travis.yml" -not -name ".git" -not -name ".*.swp" -not -name ".gnupg" -not -name ".alacritty*" -not -name ".synergy*"); do \
 		f=$$(basename $$file); \
 		ln -sfn $$file $(HOME)/$$f; \
 	done; \
@@ -54,6 +54,7 @@ etc: ## Installs the etc directory files.
 
 .PHONY: work
 work:
+	ln -sfn $(CURDIR)/.work $(HOME)/.work
 	ln -sfn $(CURDIR)/.synergy.work.conf $(HOME)/.synergy.conf
 
 .PHONY: synergy
