@@ -55,6 +55,8 @@ chrome(){
     -v "${HOME}/Pictures:/home/chrome/Pictures" \
     -v "${HOME}/Torrents:/home/chrome/Torrents" \
     -v "${HOME}/.chrome:/data" \
+    -e GDK_SCALE \
+    -e GDK_DPI_SCALE \
     --shm-size 2gb \
     -v /etc/hosts:/etc/hosts \
     --security-opt seccomp:/etc/docker/seccomp/chrome.json \

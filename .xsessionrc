@@ -27,6 +27,7 @@ fi
 xhost local:root
 
 xrandr --dpi 109 --output DisplayPort-3 --mode 2560x1440
+xrandr --dpi 332 --output eDP-1 --mode 3840x2160 --scale 1.5x1.5
 
 # uncomment this if not using a login manager
 # so i3 will start correctly
