@@ -10,6 +10,8 @@ export PATH="${GOENV_ROOT}/bin:${PATH}"
 command -v goenv > /dev/null && eval "$(goenv init -)"
 command -v gocomplete > /dev/null && complete -C gocomplete go
 
+export RIPGREP_CONFIG_PATH="${HOME}/.ripgrep"
+
 # update path for gnu coreutils, make & find on darwin
 export PATH=/usr/local/opt/coreutils/libexec/gnubin:${PATH}
 export MANPATH=/usr/local/opt/coreutils/libexec/gnuman:${MANPATH}
