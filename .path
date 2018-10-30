@@ -38,6 +38,7 @@ command -v pyenv-virtualenv > /dev/null && eval "$(pyenv virtualenv-init -)"
 
 # Terraform
 export PATH="$HOME/.tfenv/bin:$PATH"
+command -v terraform > /dev/null && complete -C $(which terraform) terraform
 
 # Google Cloud SDK
 [[ -f "${HOME}/google-cloud-sdk/path.bash.inc" ]] && source "${HOME}/google-cloud-sdk/path.bash.inc"
