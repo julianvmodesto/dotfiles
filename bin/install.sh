@@ -114,6 +114,10 @@ EOF
 
   # add the tlp apt-repo gpg key
   apt-key adv --keyserver pool.sks-keyservers.net --recv-keys CD4E8809
+
+  # Install YarnJS
+  echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list
+  curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 }
 
 base_min() {
