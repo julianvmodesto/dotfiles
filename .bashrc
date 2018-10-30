@@ -70,12 +70,14 @@ esac
 # sources /etc/bash.bashrc).
 if ! shopt -oq posix; then
   if [[ -f /usr/share/bash-completion/bash_completion ]]; then
-      # shellcheck source=/dev/null
-      . /usr/share/bash-completion/bash_completion
-  elif [[ -f /etc/bash_completion ]]; then
-      # shellcheck source=/dev/null
-      . /etc/bash_completion
-  elif [[ -f /usr/local/etc/bash_completion ]]; then
+    # shellcheck source=/dev/null
+    . /usr/share/bash-completion/bash_completion
+  fi
+  if [[ -f /etc/bash_completion ]]; then
+    # shellcheck source=/dev/null
+    . /etc/bash_completion
+  fi
+  if [[ -f /usr/local/etc/bash_completion ]]; then
       # shellcheck source=/dev/null
       . /usr/local/etc/bash_completion
   fi
@@ -103,6 +105,27 @@ if [[ -d /etc/bash_completion.d ]]; then
     source "$file"
   done
 fi
+if [[ -d /usr/share/bash-completion/completions ]]; then
+  for file in /usr/share/bash-completion/completions/* ; do
+    # shellcheck disable=
+    source "$file"
+  done
+fi
+
+# SSH autocompletion
+# https://unix.stackexchange.com/a/181603
+_ssh()
+{
+  local cur prev opts
+  COMPREPLY=()
+  cur="${COMP_WORDS[COMP_CWORD]}"
+  prev="${COMP_WORDS[COMP_CWORD-1]}"
+  opts=$(grep '^Host' ~/.ssh/config ~/.ssh/config.d/* 2>/dev/null | grep -v '[?*]' | cut -d ' ' -f 2-)
+
+  COMPREPLY=( $(compgen -W "$opts" -- ${cur}) )
+  return 0
+}
+complete -F _ssh ssh
 
 # bash vi editting
 # http://www.catonmat.net/blog/bash-vi-editing-mode-cheat-sheet/
