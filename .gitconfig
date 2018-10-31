@@ -36,7 +36,7 @@
 [user]
 	name = Julian V. Modesto
     email = julianvmodesto@gmail.com
-    signingkey = BB9AF852
+    signingkey = A635D3CDBB9AF852
 
 [filter "lfs"]
 	clean = git-lfs clean -- %f
