@@ -37,7 +37,10 @@
     name = Julian V. Modesto
     email = julianvmodesto@gmail.com
     signingkey = A635D3CDBB9AF852
-
+# keybase pgp export -q A635D3CDBB9AF852 | gpg --import
+# keybase pgp export -q A635D3CDBB9AF852 --secret | gpg --allow-secret-key-import --import
+# git config --global user.signingkey A635D3CDBB9AF852
+# git config --global commit.gpgsign true
 [filter "lfs"]
     clean = git-lfs clean -- %f
     smudge = git-lfs smudge -- %f
