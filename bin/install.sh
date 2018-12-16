@@ -207,6 +207,7 @@ base() {
     libseccomp-dev \
     network-manager \
     openvpn \
+    resolvconf \
     s3cmd \
     --no-install-recommends
 
