@@ -185,6 +185,11 @@ synergys(){
     build/bin/synergys \
     -f --address 0.0.0.0:24800 --debug INFO --no-tray --name synergys --enable-crypto -c /config/synergy.conf
 }
+traceroute(){
+  docker run --rm -it \
+    --net host \
+    ${DOCKER_REPO_PREFIX}/traceroute "$@"
+}
 zeal() {
   del_stopped zeal
 
