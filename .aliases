@@ -4,6 +4,8 @@
 alias k="kubectl"
 alias g="git"
 
+alias minikube_start="minikube start --vm-driver kvm2"
+
 # We want pb on linux
 command -v pbcopy > /dev/null || alias pbcopy='xclip -selection clipboard'
 command -v pbpaste > /dev/null || alias pbpaste='xclip -selection clipboard -o'

@@ -527,6 +527,18 @@ install_rust() {
   curl https://sh.rustup.rs -sSf | sh
 }
 
+install_minikube() {
+  # Install KVM2 hypervisor
+  sudo apt install libvirt-clients libvirt-daemon-system qemu-kvm
+  sudo usermod -a -G libvirt $(whoami)
+  newgrp libvirt << EOF
+curl -o ~/Downloads/docker-machine-driver-kvm2 https://storage.googleapis.com/minikube/releases/latest/docker-machine-driver-kvm2 -L \
+  && sudo install ~/Downloads/docker-machine-driver-kvm2 /usr/local/bin/
+EOF
+  curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 \
+    && sudo install minikube-linux-amd64 /usr/local/bin/minikube
+}
+
 usage() {
   echo -e "install.sh\\n\\tThis script installs my basic setup for a debian laptop\\n"
   echo "Usage:"
@@ -540,6 +552,7 @@ usage() {
   echo "  ruby                                - install ruby"
   echo "  rust                                - install rust"
   echo "  golang                              - install golang and packages"
+  echo "  minikube                            - install minikube"
   echo "  scripts                             - install scripts"
 }
 
@@ -588,6 +601,8 @@ main() {
     install_rust
   elif [[ $cmd == "golang" ]]; then
     install_golang "$2"
+  elif [[ $cmd == "minikube" ]]; then
+    install_minikube
   elif [[ $cmd == "scripts" ]]; then
     install_scripts
   else
