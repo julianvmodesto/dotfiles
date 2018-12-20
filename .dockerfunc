@@ -142,7 +142,7 @@ pulseaudio(){
 
   docker run -d \
     -v /etc/localtime:/etc/localtime:ro \
-    -v /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket \
+    -v "${DBUS_SESSION_BUS_ADDRESS}:/var/run/dbus/system_bus_socket" \
     --device /dev/snd \
     -p 4713:4713 \
     --restart always \
