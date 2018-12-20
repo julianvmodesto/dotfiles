@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -o pipefail
+
 export KUBECONFIG="/keybase/private/julianvmodesto/kubeconfig"
 
 if [[ -f "${HOME}/.work_secrets" ]]; then
@@ -46,6 +48,6 @@ esac
 jump_to() {
   r=$1; shift
   e=$1; shift
-  ssh -At $(curl -s "http://consul-server01.liveramp.net:8500/v1/kv/aws/$r/$e/bastion?raw") $*
+  ssh -At $(curl -s --fail "http://consul-server.liveramp.net:8500/v1/kv/aws/$r/$e/bastion?raw") $*
 }
 
