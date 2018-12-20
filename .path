@@ -37,6 +37,8 @@ export PYENV_ROOT="${HOME}/.pyenv"
 export PATH="${PYENV_ROOT}/bin:${PATH}"
 command -v pyenv > /dev/null && eval "$(pyenv init -)"
 command -v pyenv-virtualenv > /dev/null && eval "$(pyenv virtualenv-init -)"
+# TODO(jmodes): make this smart based on if pyenv virtualenv exists
+pyenv global 3.6.4 2.7.15 system neovim3 neovim2 awscli
 
 # Terraform
 export PATH="$HOME/.tfenv/bin:$PATH"
