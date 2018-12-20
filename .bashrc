@@ -157,7 +157,7 @@ if ! [[ -n "${SSH_CLIENT}" ]] && ! [[ -n "${SSH_TTY}" ]]; then
     git config --global url.ssh://git@github.com:julianvmodesto/.insteadOf https://github.com/julianvmodesto/
   fi
 
-  if [[ -S "/var/run/dbus/system_bus_socket" ]]; then
+  if [[ -z ${DBUS_SESSION_BUS_ADDRESS+x} ]] && [[ -S "/var/run/dbus/system_bus_socket" ]]; then
     export DBUS_SESSION_BUS_ADDRESS="/var/run/dbus/system_bus_socket"
   fi
 
