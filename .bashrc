@@ -154,7 +154,7 @@ if ! [[ -n "${SSH_CLIENT}" ]] && ! [[ -n "${SSH_TTY}" ]]; then
   export GIT_SSH_COMMAND="gpg-connect-agent updatestartuptty /bye >/dev/null; ssh"
 
   if command -v git > /dev/null; then
-    git config --global url.ssh://git@github.com/.insteadOf https://github.com/
+    git config --global url.ssh://git@github.com:julianvmodesto/.insteadOf https://github.com/julianvmodesto/
   fi
 
   if [[ -S "/var/run/dbus/system_bus_socket" ]]; then
