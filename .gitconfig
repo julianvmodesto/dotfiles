@@ -7,7 +7,8 @@
     pushf = push --force-with-lease
     recent = for-each-ref --count=10 --sort=-committerdate refs/heads/ --format="%(refname:short)"
 [commit]
-    gpgsign = false
+	gpgsign = false
+	verbose = true
 [core]
     editor = vim
     excludesfile = ~/.gitignore
@@ -33,6 +34,8 @@
 [submodule]
     # Fetch submodules in n parallel threads
     fetchJobs = 4
+[filter "spacify"]
+	clean = expand --tabs=2 --initial
 [user]
     name = Julian V. Modesto
     email = julianvmodesto@gmail.com
