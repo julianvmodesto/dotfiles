@@ -15,7 +15,7 @@ unset file
 
 case "$(uname)" in
   Linux)
-    . ~/.dockerfunc
+    [[ -f ~/.dockerfunc ]] && . ~/.dockerfunc
   ;;
 esac
 
