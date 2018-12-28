@@ -86,7 +86,9 @@ if command -v kubectl > /dev/null; then
 fi
 
 # k8s.io/kubernetes etcd
-export PATH="${PATH}:${GOPATH}/src/k8s.io/kubernetes/third_party/etcd"
+if [[ -d ${GOPATH}/src/k8s.io/kubernetes/third_party/etcd ]]; then
+  export PATH="${PATH}:${GOPATH}/src/k8s.io/kubernetes/third_party/etcd"
+fi
 
 # Kops
 if command -v kops > /dev/null; then
