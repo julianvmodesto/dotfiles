@@ -13,7 +13,6 @@
     editor = vim
     excludesfile = ~/.gitignore
     autocrlf = input
-[credential]
 [diff]
     # Detect copies as well as renames
     renames = copies
