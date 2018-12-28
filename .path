@@ -66,6 +66,9 @@ pyenv global ${pyenv_global}
 export PATH="$HOME/.tfenv/bin:$PATH"
 command -v terraform > /dev/null && complete -C $(which terraform) terraform
 
+# Istio
+export PATH="$HOME/istio/bin:$PATH"
+
 # Google Cloud SDK
 [[ -f "${HOME}/google-cloud-sdk/path.bash.inc" ]] && source "${HOME}/google-cloud-sdk/path.bash.inc"
 [[ -f "${HOME}/google-cloud-sdk/completion.bash.inc" ]] && source "${HOME}/google-cloud-sdk/completion.bash.inc"
