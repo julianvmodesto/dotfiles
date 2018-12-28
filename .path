@@ -116,7 +116,7 @@ command -v rbenv > /dev/null && eval "$(rbenv init -)"
 JAVA="java"
 if command -v ${JAVA} > /dev/null; then
   command -v javac > /dev/null && JAVA="javac"
-  export JAVA_HOME=${JAVA_HOME-"$(dirname $(dirname $(readlink -f $(which $JAVA))))"}
+  export JAVA_HOME=${SYSTEM_JAVA_HOME-${JAVA_HOME-"$(dirname $(dirname $(readlink -f $(which $JAVA))))"}}
 fi
 
 [[ -f /usr/local/etc/bash_completion ]] && . /usr/local/etc/bash_completion
