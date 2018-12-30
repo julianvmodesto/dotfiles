@@ -289,11 +289,6 @@ install_docker() {
 
   systemctl daemon-reload
   systemctl enable docker
-
-  # update grub with docker configs and power-saving items
-  sed -i.bak 's/GRUB_CMDLINE_LINUX=""/GRUB_CMDLINE_LINUX="cgroup_enable=memory swapaccount=1 apparmor=1 security=apparmor page_poison=1 slab_nomerge vsyscall=none"/g' /etc/default/grub
-  echo "Docker has been installed. If you want memory management & swap"
-  echo "run update-grub & reboot"
 }
 
 # install/update golang from source
