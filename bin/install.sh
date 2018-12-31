@@ -574,7 +574,7 @@ install_ruby() {
 
 # install rust
 install_rust() {
-  curl https://sh.rustup.rs -sSf | sh
+  curl https://sh.rustup.rs -sSf | sh -s -- --no-modify-path --default-toolchain nightly
 }
 
 install_minikube() {
