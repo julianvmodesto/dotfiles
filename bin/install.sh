@@ -179,6 +179,7 @@ base_min() {
     net-tools \
     neovim \
     pinentry-curses \
+    ripgrep \
     rsync \
     rxvt-unicode-256color \
     scdaemon \
@@ -218,6 +219,8 @@ base() {
     apparmor \
     bridge-utils \
     cgroupfs-mount \
+    fwupd \
+    fwupdate \
     gnupg-agent \
     google-cloud-sdk \
     iwd \
@@ -384,6 +387,11 @@ install_golang() {
   sudo ln -snf "${GOPATH}/bin/weather" /usr/local/bin/weather
 }
 
+install_goenv() {
+  git clone https://github.com/syndbg/goenv.git ~/.goenv
+  eval "$(goenv init -)"
+}
+
 # install graphics drivers
 install_graphics() {
   local system=$1
@@ -432,6 +440,10 @@ install_scripts() {
   # install lolcat
   curl -sSL https://raw.githubusercontent.com/tehmaze/lolcat/master/lolcat > /usr/local/bin/lolcat
   chmod +x /usr/local/bin/lolcat
+
+  # install fzf
+  git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+  ~/.fzf/install --key-bindings --completion --no-update-rc
 }
 
 # install wifi drivers
@@ -516,18 +528,10 @@ install_vim() {
   # install .vim files
   sudo rm -rf "${HOME}/.vim"
   git clone --recursive https://github.com/julianvmodesto/.vim.git "${HOME}/.vim"
-  ln -snf "${HOME}/.vim/vimrc" "${HOME}/.vimrc"
-  sudo ln -snf "${HOME}/.vim" /root/.vim
-  sudo ln -snf "${HOME}/.vimrc" /root/.vimrc
-
-  # alias vim dotfiles to neovim
-  mkdir -p "${XDG_CONFIG_HOME:=$HOME/.config}"
-  ln -snf "${HOME}/.vim" "${XDG_CONFIG_HOME}/nvim"
-  ln -snf "${HOME}/.vimrc" "${XDG_CONFIG_HOME}/nvim/init.vim"
-  # do the same for root
-  sudo mkdir -p /root/.config
-  sudo ln -snf "${HOME}/.vim" /root/.config/nvim
-  sudo ln -snf "${HOME}/.vimrc" /root/.config/nvim/init.vim
+  (
+  cd "${HOME}/.vim"
+  make install
+  )
 
   # update alternatives to neovim
   sudo update-alternatives --install /usr/bin/vi vi "$(which nvim)" 60
@@ -552,11 +556,18 @@ install_vim() {
   )
 }
 
+install_python() {
+  git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+  eval "$(pyenv init -)"
+  git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv
+  eval "$(pyenv virtualenv-init -)"
+}
+
 install_ruby() {
   # Install rbenv
-  git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+  git clone https://github.com/rbenv/rbenv.git ~/.rbenv || true
   cd ~/.rbenv && src/configure && make -C src || true
-  ~/.rbenv/bin/rbenv init
+  eval "$(rbenv init -)"
   mkdir -p "$(rbenv root)"/plugins
   git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
 }
@@ -634,12 +645,16 @@ main() {
     get_dotfiles
   elif [[ $cmd == "vim" ]]; then
     install_vim
+  elif [[ $cmd == "python" ]]; then
+    install_python
   elif [[ $cmd == "ruby" ]]; then
     install_ruby "$2"
   elif [[ $cmd == "rust" ]]; then
     install_rust
   elif [[ $cmd == "golang" ]]; then
     install_golang "$2"
+  elif [[ $cmd == "goenv" ]]; then
+    install_goenv
   elif [[ $cmd == "minikube" ]]; then
     install_minikube
   elif [[ $cmd == "scripts" ]]; then
