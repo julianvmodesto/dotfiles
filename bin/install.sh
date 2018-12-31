@@ -316,28 +316,27 @@ install_golang() {
   (
   set -x
   set +e
-  go get github.com/golang/lint/golint
+  go get golang.org/x/tools/cmd/guru
+  go get golang.org/x/tools/cmd/gorename
+  go get golang.org/x/tools/cmd/goimports
   go get golang.org/x/tools/cmd/cover
   go get golang.org/x/review/git-codereview
-  go get golang.org/x/tools/cmd/goimports
-  go get golang.org/x/tools/cmd/gorename
-  go get golang.org/x/tools/cmd/guru
+  go get github.com/rogpeppe/godef
+  go get github.com/mdempsky/gocode
+  go get github.com/kisielk/errcheck
+  go get github.com/jstemmer/gotags
+  go get github.com/golang/lint/golint
+  go get github.com/axw/gocov/gocov
 
   go get github.com/genuinetools/udict
   go get github.com/genuinetools/weather
 
   go get github.com/jessfraz/secping
 
-  # Tools for vimgo.
-  go get github.com/jstemmer/gotags
-  go get github.com/nsf/gocode
-  go get github.com/rogpeppe/godef
-
-  go get github.com/axw/gocov/gocov
-  go get github.com/crosbymichael/gistit
-  go get github.com/davecheney/httpstat
   go get honnef.co/go/tools/cmd/staticcheck
   go get github.com/google/gops
+  go get github.com/davecheney/httpstat
+  go get github.com/crosbymichael/gistit
 
   aliases=( genuinetools/img docker/docker moby/buildkit opencontainers/runc )
   for project in "${aliases[@]}"; do
@@ -374,7 +373,7 @@ install_golang() {
 
   # do special things for k8s GOPATH
   mkdir -p "${GOPATH}/src/k8s.io"
-  kubes_repos=( community kubernetes release sig-release test-infra )
+  kubes_repos=( community kubernetes release sig-release test-infra repo-infra )
   for krepo in "${kubes_repos[@]}"; do
     git clone "https://github.com/kubernetes/${krepo}.git" "${GOPATH}/src/k8s.io/${krepo}"
     cd "${GOPATH}/src/k8s.io/${krepo}"
