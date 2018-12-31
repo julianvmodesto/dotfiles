@@ -2,6 +2,8 @@
 
 set -o pipefail
 
+# TOOD(jmodes): write completions to files?
+
 # Golang
 export GOPATH="${HOME}/go"
 export PATH="${HOME}/bin:/usr/local/bin:/usr/local/go/bin:${PATH}:${GOPATH//://bin:}/bin:/usr/share/bcc/tools:/sbin"

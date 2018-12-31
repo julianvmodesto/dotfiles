@@ -154,6 +154,7 @@ if ! [[ -n "${SSH_CLIENT}" ]] && ! [[ -n "${SSH_TTY}" ]]; then
   export GIT_SSH_COMMAND="gpg-connect-agent updatestartuptty /bye >/dev/null; ssh"
 
   if command -v git > /dev/null; then
+    # TODO(jmodes): check that I have a key that's valid
     git config --global url.ssh://git@github.com/julianvmodesto/.insteadOf https://github.com/julianvmodesto/
   fi
 
