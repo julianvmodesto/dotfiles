@@ -178,10 +178,12 @@ base_min() {
     mount \
     net-tools \
     neovim \
+    openvpn \
+    pkg-config \
     pinentry-curses \
     ripgrep \
     rsync \
-    rxvt-unicode-256color \
+    s3cmd \
     scdaemon \
     ssh \
     strace \
@@ -230,9 +232,7 @@ base() {
     libseccomp-dev \
     network-manager \
     pinentry-curses \
-    openvpn \
     resolvconf \
-    s3cmd \
     scdaemon \
     systemd \
     xclip \
