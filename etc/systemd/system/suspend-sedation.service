@@ -1,7 +1,7 @@
 [Unit]
 Description=Hibernate after suspend
 Documentation=https://wiki.debian.org/SystemdSuspendSedation
-Conflicts=hibernate.target hybrid-sleep.target hybrid-suspend.target
+Conflicts=hibernate.target hybrid-sleep.target hybrid-suspend.target suspend-then-hibernate.target
 Before=sleep.target
 StopWhenUnneeded=true
 

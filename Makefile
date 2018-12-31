@@ -52,6 +52,8 @@ etc: ## Installs the etc directory files.
 	done
 	systemctl --user daemon-reload || true
 	sudo systemctl daemon-reload
+	sudo systemctl enable suspend-sedation.service
+	sudo systemctl disable suspend-then-hibernate.target
 
 .PHONY: work
 work:
