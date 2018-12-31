@@ -19,7 +19,8 @@ get_user() {
     fi
 
     # iterate through the user options and print them
-    PS3='Which user account should be used? '
+    # iterate through the user options and print them
+    PS3='command -v user account should be used? '
 
     select opt in "${options[@]}"; do
       readonly TARGET_USER=$opt
@@ -43,6 +44,7 @@ setup_sources_min() {
     ca-certificates \
     curl \
     dirmngr \
+    gnupg2 \
     lsb-release \
     --no-install-recommends
 
@@ -77,17 +79,25 @@ setup_sources() {
   cat <<-EOF > /etc/apt/sources.list
 deb http://httpredir.debian.org/debian buster main contrib non-free
 deb-src http://httpredir.debian.org/debian/ buster main contrib non-free
+
 deb http://httpredir.debian.org/debian/ buster-updates main contrib non-free
 deb-src http://httpredir.debian.org/debian/ buster-updates main contrib non-free
+
 deb http://security.debian.org/ buster/updates main contrib non-free
 deb-src http://security.debian.org/ buster/updates main contrib non-free
-#deb http://httpredir.debian.org/debian/ jessie-backports main contrib non-free
-#deb-src http://httpredir.debian.org/debian/ jessie-backports main contrib non-free
+
 deb http://httpredir.debian.org/debian experimental main contrib non-free
 deb-src http://httpredir.debian.org/debian experimental main contrib non-free
-# yubico
+EOF
+
+  # yubico
+  cat <<-EOF > /etc/apt/sources.list.d/yubico.list
 deb http://ppa.launchpad.net/yubico/stable/ubuntu xenial main
 deb-src http://ppa.launchpad.net/yubico/stable/ubuntu xenial main
+EOF
+
+  # tlp: Advanced Linux Power Management
+  cat <<-EOF > /etc/apt/sources.list.d/tlp.list
 # tlp: Advanced Linux Power Management
 # http://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html
 deb http://repo.linrunner.de/debian sid main
@@ -98,13 +108,18 @@ EOF
   export CLOUD_SDK_REPO
 
   # Add the Cloud SDK distribution URI as a package source
-  echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" > /etc/apt/sources.list.d/google-cloud-sdk.list
+  # Add the Cloud SDK distribution URI as a package source
+  cat <<-EOF > /etc/apt/sources.list.d/google-cloud-sdk.list
+deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main
+EOF
 
   # Import the Google Cloud Platform public key
   curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 
   # Add the Google Chrome distribution URI as a package source
-  echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
+  cat <<-EOF > /etc/apt/sources.list.d/google-chrome.list
+deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main
+EOF
 
   # Import the Google Chrome public key
   curl https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
@@ -116,12 +131,14 @@ EOF
   apt-key adv --keyserver pool.sks-keyservers.net --recv-keys CD4E8809
 
   # Install YarnJS
-  echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list
+  cat <<-EOF > /etc/apt/sources.list.d/yarn.list
+deb https://dl.yarnpkg.com/debian/ stable main
+EOF
   curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 }
 
 base_min() {
-  apt update
+  apt update || true
   apt -y upgrade
 
   apt install -y \
@@ -193,7 +210,7 @@ base_min() {
 base() {
   base_min;
 
-  apt update
+  apt update || true
   apt -y upgrade
 
   apt install -y \
@@ -201,14 +218,22 @@ base() {
     apparmor \
     bridge-utils \
     cgroupfs-mount \
+    gnupg-agent \
     google-cloud-sdk \
+    iwd \
     libapparmor-dev \
     libltdl-dev \
+    libpam-systemd \
     libseccomp-dev \
     network-manager \
+    pinentry-curses \
     openvpn \
     resolvconf \
     s3cmd \
+    scdaemon \
+    systemd \
+    xclip \
+    xcompmgr \
     --no-install-recommends
 
   # install tlp with recommends
@@ -219,8 +244,6 @@ base() {
   apt autoremove
   apt autoclean
   apt clean
-
-  install_docker
 }
 
 # setup sudo for a user
@@ -239,9 +262,12 @@ setup_sudo() {
   gpasswd -a "$TARGET_USER" systemd-journal
   gpasswd -a "$TARGET_USER" systemd-network
 
+  getent group docker || sudo groupadd docker
+  sudo gpasswd -a "$TARGET_USER" docker
+
   # add go path to secure path
   { \
-    echo -e "Defaults   secure_path=\"/usr/local/go/bin:/home/${USERNAME}/.go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\""; \
+    echo -e "Defaults	secure_path=\"/usr/local/go/bin:/home/${TARGET_USER}/.go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\""; \
     echo -e 'Defaults   env_keep += "ftp_proxy http_proxy https_proxy no_proxy GOPATH EDITOR"'; \
     echo -e "${TARGET_USER} ALL=(ALL) NOPASSWD:ALL"; \
     echo -e "${TARGET_USER} ALL=NOPASSWD: /sbin/ifconfig, /sbin/ifup, /sbin/ifdown, /sbin/ifquery"; \
@@ -252,43 +278,6 @@ setup_sudo() {
   # i like things clean but you may not want this
   mkdir -p "/home/$TARGET_USER/Downloads"
   echo -e "\\n# tmpfs for downloads\\ntmpfs\\t/home/${TARGET_USER}/Downloads\\ttmpfs\\tnodev,nosuid,size=2G\\t0\\t0" >> /etc/fstab
-}
-
-# installs docker master
-# and adds necessary items to boot params
-install_docker() {
-  # create docker group
-  sudo groupadd docker || true
-  sudo gpasswd -a "$TARGET_USER" docker
-
-  # Include contributed completions
-  mkdir -p /etc/bash_completion.d
-  curl -sSL -o /etc/bash_completion.d/docker https://raw.githubusercontent.com/docker/docker-ce/master/components/cli/contrib/completion/bash/docker
-
-
-  # get the binary
-  local tmp_tar=/tmp/docker.tgz
-  local binary_uri="https://download.docker.com/linux/static/edge/x86_64"
-  local docker_version
-  docker_version=$(curl -sSL "https://api.github.com/repos/docker/docker-ce/releases/latest" | jq --raw-output .tag_name)
-  docker_version=${docker_version#v}
-  # local docker_sha256
-  # docker_sha256=$(curl -sSL "${binary_uri}/docker-${docker_version}.tgz.sha256" | awk '{print $1}')
-  (
-  set -x
-  curl -fSL "${binary_uri}/docker-${docker_version}.tgz" -o "${tmp_tar}"
-  # echo "${docker_sha256} ${tmp_tar}" | sha256sum -c -
-  tar -C /usr/local/bin --strip-components 1 -xzvf "${tmp_tar}"
-  rm "${tmp_tar}"
-  docker -v
-  )
-  chmod +x /usr/local/bin/docker*
-
-  curl -sSL https://raw.githubusercontent.com/julianvmodesto/dotfiles/master/etc/systemd/system/docker.service > /etc/systemd/system/docker.service
-  curl -sSL https://raw.githubusercontent.com/julianvmodesto/dotfiles/master/etc/systemd/system/docker.socket > /etc/systemd/system/docker.socket
-
-  systemctl daemon-reload
-  systemctl enable docker
 }
 
 # install/update golang from source
@@ -324,11 +313,22 @@ install_golang() {
   (
   set -x
   set +e
+  go get github.com/golang/lint/golint
+  go get golang.org/x/tools/cmd/cover
+  go get golang.org/x/review/git-codereview
+  go get golang.org/x/tools/cmd/goimports
+  go get golang.org/x/tools/cmd/gorename
+  go get golang.org/x/tools/cmd/guru
 
   go get github.com/genuinetools/udict
   go get github.com/genuinetools/weather
 
   go get github.com/jessfraz/secping
+
+  # Tools for vimgo.
+  go get github.com/jstemmer/gotags
+  go get github.com/nsf/gocode
+  go get github.com/rogpeppe/godef
 
   go get github.com/axw/gocov/gocov
   go get github.com/crosbymichael/gistit
@@ -336,9 +336,42 @@ install_golang() {
   go get honnef.co/go/tools/cmd/staticcheck
   go get github.com/google/gops
 
+  aliases=( genuinetools/img docker/docker moby/buildkit opencontainers/runc )
+  for project in "${aliases[@]}"; do
+    owner=$(dirname "$project")
+    repo=$(basename "$project")
+    if [[ -d "${HOME}/${repo}" ]]; then
+      rm -rf "${HOME:?}/${repo}"
+    fi
+
+    mkdir -p "${GOPATH}/src/github.com/${owner}"
+
+    if [[ ! -d "${GOPATH}/src/github.com/${project}" ]]; then
+      (
+      # clone the repo
+      cd "${GOPATH}/src/github.com/${owner}"
+      git clone "https://github.com/${project}.git"
+      # fix the remote path, since our gitconfig will make it git@
+      cd "${GOPATH}/src/github.com/${project}"
+      git remote set-url origin "https://github.com/${project}.git"
+      )
+    else
+      echo "found ${project} already in gopath"
+    fi
+
+    # make sure we create the right git remotes
+    if [[ "$owner" != "julianvmodesto" ]]; then
+      (
+      cd "${GOPATH}/src/github.com/${project}"
+      git remote set-url --push origin no_push
+      git remote add julianvmodesto "https://github.com/julianvmodesto/${repo}.git"
+      )
+    fi
+  done
+
   # do special things for k8s GOPATH
   mkdir -p "${GOPATH}/src/k8s.io"
-  kubes_repos=( community kubernetes release test-infra )
+  kubes_repos=( community kubernetes release sig-release test-infra )
   for krepo in "${kubes_repos[@]}"; do
     git clone "https://github.com/kubernetes/${krepo}.git" "${GOPATH}/src/k8s.io/${krepo}"
     cd "${GOPATH}/src/k8s.io/${krepo}"
@@ -346,6 +379,9 @@ install_golang() {
     git remote add julianvmodesto "https://github.com/julianvmodesto/${krepo}.git"
   done
   )
+
+  # symlink weather binary for motd
+  sudo ln -snf "${GOPATH}/bin/weather" /usr/local/bin/weather
 }
 
 # install graphics drivers
@@ -357,7 +393,7 @@ install_graphics() {
     exit 1
   fi
 
-  local pkgs=( xorg xserver-xorg )
+  local pkgs=( xorg xserver-xorg xserver-xorg-input-libinput xserver-xorg-input-synaptics )
 
   case $system in
     "intel")
@@ -374,6 +410,9 @@ install_graphics() {
       exit 1
       ;;
   esac
+
+  apt update || true
+  apt -y upgrade
 
   apt install -y "${pkgs[@]}" --no-install-recommends
 }
@@ -417,6 +456,7 @@ install_wifi() {
 install_wmapps() {
   local pkgs=( feh i3 i3lock i3status scrot suckless-tools )
 
+  apt update || true
   apt install -y "${pkgs[@]}" --no-install-recommends
 
   # update clickpad settings
@@ -442,8 +482,11 @@ get_dotfiles() {
   (
   cd "$HOME"
 
-  # install dotfiles from repo
-  git clone https://github.com/julianvmodesto/dotfiles.git "${HOME}/dotfiles"
+  if [[ ! -d "${HOME}/dotfiles" ]]; then
+    # install dotfiles from repo
+    git clone https://github.com/julianvmodesto/dotfiles.git "${HOME}/dotfiles"
+  fi
+
   cd "${HOME}/dotfiles"
 
   # installs all the things
@@ -455,12 +498,13 @@ get_dotfiles() {
   sudo systemctl enable "i3lock@${TARGET_USER}"
   sudo systemctl enable suspend-sedation.service
 
+  sudo systemctl enable systemd-networkd systemd-resolved
+  sudo systemctl start systemd-networkd systemd-resolved
+
   cd "$HOME"
   mkdir -p ~/Pictures/Screenshots
-  mkdir -p ~/Torrents
   )
 
-  install_ruby
   install_vim;
 }
 
@@ -494,7 +538,7 @@ install_vim() {
   sudo update-alternatives --config editor
 
   # install things needed for deoplete for vim
-  sudo apt update
+  sudo apt update || true
 
   sudo apt install -y \
     python3-pip \
