@@ -441,8 +441,17 @@ install_scripts() {
   chmod +x /usr/local/bin/lolcat
 
   # install fzf
-  git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-  ~/.fzf/install --key-bindings --completion --no-update-rc
+  if [[ ! -d ~/.fzf ]]; then
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+    ~/.fzf/install --key-bindings --completion --no-update-rc
+  fi
+
+  local scripts=( have light )
+
+  for script in "${scripts[@]}"; do
+    curl -sSL "https://misc.j3ss.co/binaries/$script" > "/usr/local/bin/${script}"
+    chmod +x "/usr/local/bin/${script}"
+  done
 }
 
 # install wifi drivers
