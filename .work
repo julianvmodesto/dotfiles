@@ -1,9 +1,6 @@
 #!/bin/bash
 
 set -o pipefail
-
-export KUBECONFIG="/keybase/private/julianvmodesto/kubeconfig"
-
 if [[ -f "${HOME}/.work_secrets" ]]; then
   source "${HOME}/.work_secrets"
 fi
