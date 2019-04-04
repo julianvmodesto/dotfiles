@@ -106,12 +106,6 @@ htop(){
     --name htop \
     ${DOCKER_REPO_PREFIX}/htop
 }
-jq(){
-  docker run -i --rm \
-    --name jq \
-    ${DOCKER_REPO_PREFIX}/jq "$@"
-}
-export -f jq
 landscape(){
   docker run -i --rm \
     --name landscape \
