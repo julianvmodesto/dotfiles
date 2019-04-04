@@ -117,6 +117,10 @@ landscape(){
     --name landscape \
     ${DOCKER_REPO_PREFIX}/landscape "$@"
 }
+mycli(){
+  docker run --rm -it \
+    ${DOCKER_REPO_PREFIX}/mycli "$@"
+}
 notify_osd(){
   del_stopped notify_osd
 
@@ -137,6 +141,10 @@ notify-send(){
   docker exec -i notify_osd notify-send "$1" "${args}"
 }
 export -f notify-send
+pgcli(){
+  docker run --rm -it \
+    ${DOCKER_REPO_PREFIX}/pgcli "$@"
+}
 pulseaudio(){
   del_stopped pulseaudio
 
