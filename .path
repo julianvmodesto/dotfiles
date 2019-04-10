@@ -8,6 +8,8 @@ set -o pipefail
 export GOPATH="${HOME}/go"
 export PATH="${HOME}/bin:/usr/local/bin:/usr/local/go/bin:${PATH}:${GOPATH//://bin:}/bin:/usr/share/bcc/tools:/sbin"
 export GOENV_ROOT="${HOME}/.goenv"
+export GOENV_DISABLE_GOROOT=1
+export GOENV_DISABLE_GOPATH=1
 export PATH="${GOENV_ROOT}/bin:${PATH}"
 command -v goenv > /dev/null && eval "$(goenv init -)"
 command -v gocomplete > /dev/null && complete -C gocomplete go
