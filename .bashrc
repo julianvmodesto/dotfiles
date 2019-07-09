@@ -156,6 +156,7 @@ if ! [[ -n "${SSH_CLIENT}" ]] && ! [[ -n "${SSH_TTY}" ]]; then
   if command -v git > /dev/null; then
     # TODO(jmodes): check that I have a key that's valid
     git config --global url.ssh://git@github.com/julianvmodesto/.insteadOf https://github.com/julianvmodesto/
+    git config --global url.ssh://git@github.com/LiveRamp/.insteadOf https://github.com/LiveRamp/
   fi
 
   if [[ -z ${DBUS_SESSION_BUS_ADDRESS+x} ]] && [[ -S "/var/run/dbus/system_bus_socket" ]]; then
