@@ -5,6 +5,7 @@
 # export GDK_DPI_SCALE=0.50
 # export QT_DEVICE_PIXEL_RATIO=1
 
+export DOCKER_BUILDKIT=1
 export TERMINAL="alacritty";
 
 # Make vim the default editor
