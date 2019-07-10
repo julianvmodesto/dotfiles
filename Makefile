@@ -9,6 +9,9 @@ ifeq ($(UNAME_S),Darwin)
   ALACRITTY := .alacritty-osx.yml
 endif
 
+XDG_CONFIG_HOME ?= "${HOME}/.config"
+XDG_DATA_HOME ?= "${HOME}/.local/share"
+
 .PHONY: bin
 bin: ## Installs the bin directory files.
 	# add aliases for things in bin
@@ -20,26 +23,28 @@ bin: ## Installs the bin directory files.
 .PHONY: dotfiles
 dotfiles:
 	# add aliases for dotfiles
-	for file in $(shell find $(CURDIR) -name ".*" -not -name ".work" -not -name ".gitignore" -not -name ".travis.yml" -not -name ".git" -not -name ".*.swp" -not -name ".gnupg" -not -name ".alacritty*" -not -name ".synergy*"); do \
+	for file in $(shell find $(CURDIR) -name ".*" -not -name ".work" -not -name ".gitignore" -not -name ".travis.yml" -not -name ".git" -not -name ".gitattributes" -not -name ".*.swp" -not -name ".gnupg" -not -name ".alacritty*" -not -name ".synergy*"); do \
 		f=$$(basename $$file); \
 		ln -sfn $$file $(HOME)/$$f; \
 	done; \
+	mkdir -p ${XDG_DATA_HOME};
+	mkdir -p ${XDG_CONFIG_HOME};
 	mkdir -p $(HOME)/.gnupg
 	ln -sfn $(CURDIR)/.gnupg/gpg.conf $(HOME)/.gnupg/gpg.conf;
 	ln -sfn $(CURDIR)/.gnupg/gpg-agent.conf $(HOME)/.gnupg/gpg-agent.conf;
 	ln -sfn $(CURDIR)/.gnupg/scdaemon.conf $(HOME)/.gnupg/scdaemon.conf;
-	mkdir -p $(HOME)/.config;
-	ln -snf $(CURDIR)/.i3 $(HOME)/.config/sway;
 	ln -snf $(CURDIR)/.bash_profile $(HOME)/.profile;
-	mkdir -p $(HOME)/.local/share;
-	ln -snf $(CURDIR)/.fonts $(HOME)/.local/share/fonts;
+	ln -snf $(CURDIR)/.i3 ${XDG_CONFIG_HOME}/sway;
+	ln -snf $(CURDIR)/.fonts ${XDG_DATA_HOME}/fonts;
 	if [ -f /usr/local/bin/pinentry ]; then \
 		sudo ln -snf /usr/bin/pinentry /usr/local/bin/pinentry; \
 	fi;
 	ln -sfn $(CURDIR)/$(ALACRITTY) $(HOME)/.alacritty.yml
-	mkdir -p $(HOME)/.config/alacritty
-	ln -sfn $(CURDIR)/$(ALACRITTY) $(HOME)/.config/alacritty/alacritty.yml
+	mkdir -p ${XDG_CONFIG_HOME}/alacritty
+	ln -sfn $(CURDIR)/$(ALACRITTY) ${XDG_CONFIG_HOME}/alacritty/alacritty.yml
 	mkdir -p $(HOME)/.icons/default
+	mkdir -p ${XDG_CONFIG_HOME}/git
+	ln -sfn $(CURDIR)/.gitattributes ${XDG_CONFIG_HOME}/git/attributes
 
 .PHONY: etc
 etc: ## Installs the etc directory files.
