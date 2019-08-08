@@ -11,6 +11,7 @@ export GOENV_ROOT="${HOME}/.goenv"
 export GOENV_DISABLE_GOROOT=1
 export GOENV_DISABLE_GOPATH=1
 export GO111MODULE=on
+export GOPROXY=https://proxy.golang.org
 export PATH="${GOENV_ROOT}/bin:${PATH}"
 command -v goenv > /dev/null && eval "$(goenv init -)"
 command -v gocomplete > /dev/null && complete -C gocomplete go
