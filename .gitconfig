@@ -7,6 +7,7 @@
     staaash = stash --all
     pushf = push --force-with-lease
     recent = for-each-ref --count=10 --sort=-committerdate refs/heads/ --format="%(refname:short)"
+    root = rev-parse --show-toplevel
 [commit]
     gpgsign = false
     verbose = true
