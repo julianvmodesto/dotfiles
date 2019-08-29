@@ -8,6 +8,15 @@
 export DOCKER_BUILDKIT=1
 export TERMINAL="alacritty";
 
+# Golang
+export GOENV_ROOT="${HOME}/.goenv"
+export GOENV_DISABLE_GOROOT=1
+export GOENV_DISABLE_GOPATH=1
+export GO111MODULE=auto
+export GOPROXY=https://proxy.golang.org
+
+export RIPGREP_CONFIG_PATH="${HOME}/.ripgrep"
+
 # Make vim the default editor
 export EDITOR='vim'
 export VISUAL='vim'

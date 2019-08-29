@@ -5,7 +5,7 @@ set -o pipefail
 # Load the shell dotfiles, and then some:
 # * ~/.path can be used to extend `$PATH`.
 # * ~/.extra can be used for other settings you don’t want to commit.
-for file in ~/.{bashrc,bash_prompt,aliases,functions,path,extra,exports,work}; do
+for file in ~/.{bashrc,bash_prompt,aliases,functions,extra,path,exports,work}; do
   if [[ -r "$file" ]] && [[ -f "$file" ]]; then
     # shellcheck disable=
     source "$file"
