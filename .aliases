@@ -55,3 +55,4 @@ alias mv='mv -i'
 
 command -v update-alternatives > /dev/null || alias vim='NVIM_TUI_ENABLE_TRUE_COLOR=1 nvim'
 
+alias tmuxa="tmux new-session -A -s main"
