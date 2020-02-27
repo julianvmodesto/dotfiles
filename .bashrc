@@ -69,17 +69,15 @@ esac
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
 if ! shopt -oq posix; then
-  if [[ -f /usr/share/bash-completion/bash_completion ]]; then
-    # shellcheck source=/dev/null
-    . /usr/share/bash-completion/bash_completion
-  fi
-  if [[ -f /etc/bash_completion ]]; then
-    # shellcheck source=/dev/null
-    . /etc/bash_completion
-  fi
-  if [[ -f /usr/local/etc/bash_completion ]]; then
-      # shellcheck source=/dev/null
-      . /usr/local/etc/bash_completion
+  if [[ -e "/usr/local/share/bash-completion/bash_completion" ]]; then
+      export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
+      source "/usr/local/share/bash-completion/bash_completion"
+  elif [[ -e "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
+      source "/usr/local/etc/profile.d/bash_completion.sh"
+  elif [[ -e "/etc/bash_completion" ]]; then
+      source "/etc/bash_completion"
+  elif [[ -e "/usr/share/bash-completion/bash_completion" ]]; then
+      source "/usr/share/bash-completion/bash_completion"
   fi
 fi
 

@@ -2,15 +2,12 @@
 
 set -o pipefail
 
-# TOOD(jmodes): write completions to files?
-
 # Golang
 export GOPATH="${HOME}/go"
 export PATH="${HOME}/bin:/usr/local/bin:/usr/local/go/bin:${PATH}:${GOPATH//://bin:}/bin:/usr/share/bcc/tools:/sbin"
 export GOENV_ROOT="${HOME}/.goenv"
 export PATH="${GOENV_ROOT}/bin:${PATH}"
 command -v goenv > /dev/null && eval "$(goenv init -)"
-command -v gocomplete > /dev/null && complete -C gocomplete go
 
 # update path for gnu coreutils, make & find on darwin
 export PATH=/usr/local/opt/coreutils/libexec/gnubin:${PATH}
@@ -22,18 +19,8 @@ export MANPATH=/usr/local/opt/findutils/libexec/gnuman:${MANPATH}
 export PATH=/usr/local/opt/gnu-sed/libexec/gnubin:${PATH}
 export MANPATH=/usr/local/opt/gnu-sed/libexec/gnuman:${MANPATH}
 
-# macOS Homebrew bash completion
-if [[ -f /usr/local/etc/bash_completion ]]; then
-  # shellcheck disable=SC1090,SC1091
-  source /usr/local/etc/bash_completion
-fi
-
 # Rust
 export PATH="${PATH}:${HOME}/.cargo/bin"
-if command -v rustup > /dev/null; then
-  # shellcheck disable=SC1090,SC1091
-  source <(rustup completions bash)
-fi
 
 # Ruby
 export PATH="${PATH}:${HOME}/.rbenv/bin"
@@ -43,84 +30,19 @@ export PYENV_ROOT="${HOME}/.pyenv"
 export PATH="${PYENV_ROOT}/bin:${PATH}"
 command -v pyenv > /dev/null && eval "$(pyenv init -)"
 command -v pyenv-virtualenv > /dev/null && eval "$(pyenv virtualenv-init -)"
-if command -v pyenv > /dev/null; then
-  pyenv_versions=$(pyenv versions)
-  pyenv_global=" "
-
-  # Find python2
-  if echo "${pyenv_versions}" | grep -q 3.6.4; then
-    pyenv_global="${pyenv_global} 3.6.4"
-  fi
-  # Find python3
-  if echo "${pyenv_versions}" | grep -q 2.7.15; then
-    pyenv_global="${pyenv_global} 2.7.15"
-  elif echo "${pyenv_versions}" | grep -q 2.7.10; then
-    pyenv_global="${pyenv_global} 2.7.10"
-  fi
-  # Set pyenv global, then add extras
-  pyenv_global="${pyenv_global} system"
-  if echo "${pyenv_versions}" | grep -q neovim3; then
-    pyenv_global="${pyenv_global} neovim3"
-  fi
-  if echo "${pyenv_versions}" | grep -q neovim2; then
-    pyenv_global="${pyenv_global} neovim2"
-  fi
-  if echo "${pyenv_versions}" | grep -q awscli; then
-    pyenv_global="${pyenv_global} awscli"
-  fi
-  pyenv global ${pyenv_global}
-fi
 
 # Terraform
 export PATH="$HOME/.tfenv/bin:$PATH"
-command -v terraform > /dev/null && complete -C $(which terraform) terraform
 
 # Istio
 export PATH="$HOME/istio/bin:$PATH"
 
 # Google Cloud SDK
 [[ -f "${HOME}/google-cloud-sdk/path.bash.inc" ]] && source "${HOME}/google-cloud-sdk/path.bash.inc"
-[[ -f "${HOME}/google-cloud-sdk/completion.bash.inc" ]] && source "${HOME}/google-cloud-sdk/completion.bash.inc"
-
-# AWS CLI
-command -v aws_completer > /dev/null && complete -C 'aws_completer' aws
-
-# Bazel
-[[ -f "${HOME}/.bazel/bin/bazel-complete.bash" ]] && . "${HOME}/.bazel/bin/bazel-complete.bash"
-
-# Kubernetes
-if command -v kubectl > /dev/null; then
-  # shellcheck disable=SC1090,SC1091
-  source <(kubectl completion bash)
-fi
-
-if command -v minikube > /dev/null; then
-  # shellcheck disable=SC1090,SC1091
-  source <(minikube completion bash)
-fi
 
 # k8s.io/kubernetes etcd
 if [[ -d ${GOPATH}/src/k8s.io/kubernetes/third_party/etcd ]]; then
   export PATH="${PATH}:${GOPATH}/src/k8s.io/kubernetes/third_party/etcd"
-fi
-
-# Kops
-if command -v kops > /dev/null; then
-  # shellcheck disable=SC1090,SC1091
-  source <(kops completion bash)
-fi
-
-# fzf
-# shellcheck disable=SC1090,SC1091
-[[ -f ~/.fzf.bash ]] && source ~/.fzf.bash
-
-# Node
-export NVM_DIR="${HOME}/.nvm"
-mkdir -p "$NVM_DIR"
-[[ -s "${NVM_DIR}/nvm.sh" ]] && \. "${NVM_DIR}/nvm.sh"  # This loads nvm
-[[ -s "${NVM_DIR}/bash_completion" ]] && \. "${NVM_DIR}/bash_completion"  # This loads nvm bash_completion
-if command -v yarn > /dev/null; then
-  export PATH="${PATH}:$(yarn global bin)"
 fi
 
 # Ruby
@@ -133,4 +55,4 @@ if command -v ${JAVA} > /dev/null; then
   export JAVA_HOME=${SYSTEM_JAVA_HOME-${JAVA_HOME-"$(dirname $(dirname $(readlink -f $(which $JAVA))))"}}
 fi
 
-[[ -f /usr/local/etc/bash_completion ]] && . /usr/local/etc/bash_completion
+export PATH="/usr/local/opt/mysql-client/bin:$PATH"
