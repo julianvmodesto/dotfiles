@@ -42,7 +42,7 @@ if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]]; then
 fi
 
 # gcloud
-export CLOUDSDK_PYTHON="/usr/bin/python2"
+export CLOUDSDK_PYTHON="python3"
 
 export KUBECONFIG="/keybase/private/julianvmodesto/kubeconfig"
 
